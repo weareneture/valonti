@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     margin: 0 auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
     border-radius: 0px;
     overflow: hidden;
     background: #0f0f0f;
@@ -104,6 +104,6 @@
 
 @media (max-width: 768px) {
     .compare__wrapper {
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 10 / 6;
     }
 }
