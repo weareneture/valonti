@@ -1,0 +1,50 @@
+/* Сброс/нормализация по минимуму */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}article
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #1f2933;
+  background-color: #f5f7fa;
+}
+
+/* Общая сетка страницы */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1 0 auto;
+}
+
+
+/* Контейнер */
+.container {
+  width: 100%;
+  max-width: 1140px;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+/* Hero-блок */
+.hero {
+  padding: 48px 0 32px;
+}
+
+
+/* Адаптив */
+@media (max-width: 768px) {
+  
+  
+}
