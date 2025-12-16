@@ -37,6 +37,16 @@ body {
   margin: 0 auto;
 }
 
+.container__cat {
+  display: flex;
+  padding: 40px 100px;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 20px;
+  align-self: stretch;
+  flex-wrap: wrap;
+}
+
 /* Hero-блок */
 .hero {
   padding: 48px 0 32px;
