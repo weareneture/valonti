@@ -8,13 +8,19 @@
   <!-- Основные стили -->
   <link rel="stylesheet" href="styles.css" />
 </head>
-    
+
 <body>
     <main class="main">
       <section class="category__list">
         <div class="container__cat">
-          
-          <div class="model__cat tables" onclick="openTildaPopup('areolum')">
+
+          <div class="category__tabs">
+            <button class="category__tab active" data-target="tables">Столы</button>
+            <button class="category__tab" data-target="mirrors">Зеркала</button>
+          </div>
+
+          <div class="model__cat active" data-category="tables">
+
            <div class="model__item half">
             <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
             <div class="model__content">
@@ -69,7 +75,72 @@
 
           </div>
 
-          <div class="model__cat mirrors">
+          <div class="model__cat" data-category="mirrors">
+
+            <div class="model__item half" onclick="openTildaPopup('areolum')">
+              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+              <div class="model__content">
+                <div class="model__content__left">
+                  <p class="model__catname">Зеркало</p>
+                  <h2 class="model__title">Arkulo</h2>
+                </div>
+                <div class="model__content__right">
+                  <p class="model__price">от 320 000 ₽</p>
+                </div>
+              </div>
+             </div>
+
+             <div class="model__item half" onclick="openTildaPopup('areolum')">
+              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+              <div class="model__content">
+                <div class="model__content__left">
+                  <p class="model__catname">Зеркало</p>
+                  <h2 class="model__title">Arkulo</h2>
+                </div>
+                <div class="model__content__right">
+                  <p class="model__price">от 320 000 ₽</p>
+                </div>
+              </div>
+             </div>
+
+             <div class="model__item third" onclick="openTildaPopup('areolum')">
+              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+              <div class="model__content">
+                <div class="model__content__left">
+                  <p class="model__catname">Зеркало</p>
+                  <h2 class="model__title">Arkulo</h2>
+                </div>
+                <div class="model__content__right">
+                  <p class="model__price">от 320 000 ₽</p>
+                </div>
+              </div>
+             </div>
+
+             <div class="model__item third" onclick="openTildaPopup('areolum')">
+              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+              <div class="model__content">
+                <div class="model__content__left">
+                  <p class="model__catname">Зеркало</p>
+                  <h2 class="model__title">Arkulo</h2>
+                </div>
+                <div class="model__content__right">
+                  <p class="model__price">от 320 000 ₽</p>
+                </div>
+              </div>
+             </div>
+
+             <div class="model__item third" onclick="openTildaPopup('areolum')">
+              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+              <div class="model__content">
+                <div class="model__content__left">
+                  <p class="model__catname">Зеркало</p>
+                  <h2 class="model__title">Arkulo</h2>
+                </div>
+                <div class="model__content__right">
+                  <p class="model__price">от 320 000 ₽</p>
+                </div>
+              </div>
+             </div>
 
           </div>
 
@@ -77,5 +148,29 @@
       </section>
     </main>
 
-</body>
-</html>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.category__tab');
+        const categories = document.querySelectorAll('.model__cat');
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-target');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            categories.forEach(cat => {
+              if (cat.getAttribute('data-category') === target) {
+                cat.classList.add('active');
+              } else {
+                cat.classList.remove('active');
+              }
+            });
+          });
+        });
+      });
+    </script>
+
+  </body>
+  </html>

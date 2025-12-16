@@ -41,10 +41,46 @@ body {
   width: 100%;
 }
 
+.category__tabs {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 24px;
+  gap: 4px;
+}
+
+.category__tab {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "RF Dewi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.category__tab.active {
+  background: #ffffff;
+  color: #000000;
+}
+
+.category__tab:not(.active):hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .model__cat {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  display: none;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 20px;
+}
+
+.model__cat.active {
+  display: grid;
 }
 
 .model__item {
@@ -69,15 +105,15 @@ body {
 }
 
 .model__item.half {
-  grid-column: span 10;
+  grid-column: span 6;
 }
 
 .model__item.big {
-  grid-column: span 12;
+  grid-column: span 8;
 }
 
 .model__item.third {
-  grid-column: span 8;
+  grid-column: span 4;
 }
 
 img.model__img {
