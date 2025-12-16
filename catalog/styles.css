@@ -41,37 +41,51 @@ body {
   width: 100%;
 }
 
-.tables__cat {
-  display: flex;
-  align-items: flex-start;
-  align-content: flex-start;
+.model__cat {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 20px;
-  align-self: stretch;
-  flex-wrap: wrap;
 }
 
-.table__item {
+.model__item {
+  overflow: hidden;
   display: flex;
   height: 320px;
-  flex-basis: 50%;
   padding: 20px;
   position: relative;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  flex: 1 0 0;
+  border-radius: 4px;
+  background: #181818;
+  transition: opacity 0.5s ease-in-out,
+  transform 0.5s ease-in-out;
+  cursor: pointer;
 }
 
-.table__item.half {
- flex-basis: 50%;
+.model__item:hover {
+  transform: scale(1.02);
 }
 
-.table__item.third {
-  flex-basis: 33.33%;
+.model__item.half {
+  grid-column: span 10;
 }
 
-.table__content {
+.model__item.big {
+  grid-column: span 12;
+}
+
+.model__item.third {
+  grid-column: span 8;
+}
+
+img.model__img {
+  height: 90%;
+  width: auto;
+}
+
+.model__content {
   position: absolute;
   left: 20px;
   right: 20px;
@@ -79,16 +93,16 @@ body {
   width: calc(100% - 40px);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
-.table__content__left {
+.model__content__left {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.table__catname {
+.model__catname {
   color: rgba(255, 255, 255, 0.60);
   font-family: "RF Dewi";
   font-size: 12px;
@@ -97,7 +111,7 @@ body {
   line-height: 16px; /* 133.333% */
 }
 
-h2.table__title {
+h2.model__title {
   color: #FFF;
   font-family: "RF Dewi";
   font-size: 14px;
@@ -107,7 +121,7 @@ h2.table__title {
   text-transform: uppercase;
 }
 
-.table__price {
+.model__price {
   color: #FFF;
   font-family: "RF Dewi";
   font-size: 12px;
@@ -116,15 +130,45 @@ h2.table__title {
   line-height: 16px; /* 133.333% */
 }
 
-
-/* Hero-блок */
-.hero {
-  padding: 48px 0 32px;
-}
-
-
-/* Адаптив */
 @media (max-width: 768px) {
-  
-  
+  .model__cat {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .model__item {
+    height: 200px;
+    padding: 16px;
+  }
+
+  .model__content__left {
+    gap: 2px;
+  }
+
+  h2.model__title, .model__price {
+    font-size: 12px;
+  }
+
+  .model__content {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: calc(100% - 32px);
+  }
+
+  .model__catname {
+    font-size: 10px;
+  }
+
+  .model__item,
+  .model__item.half,
+  .model__item.big,
+  .model__item.third {
+    grid-column: auto;
+  }
+
+  .model__item:hover {
+    transform: none;
+  }
 }
