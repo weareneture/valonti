@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     margin: 0 auto;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 12;
     border-radius: 0px;
     overflow: hidden;
     background: #0f0f0f;
@@ -47,7 +47,7 @@
 .compare__divider::before {
     content: "";
     position: absolute;
-    width: 1.5px;
+    width: 1.2px;
     top: 0;
     bottom: 0;
     left: 50%;
@@ -64,7 +64,7 @@
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 2px solid #ffffff40;
+    border: 1.8px solid #ffffff40;
     background: transparent;
     display: inline-flex;
     align-items: center;
@@ -82,7 +82,7 @@
 
 
 .compare__handle:hover {
-  border: 2px solid #ffffff;
+  border: 1.8px solid #ffffff;
 }
 
 .compare__handle:active {
