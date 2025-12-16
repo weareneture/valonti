@@ -5,14 +5,17 @@ document.querySelectorAll('[data-compare]').forEach(wrapper => {
     const divider = wrapper.querySelector('[data-divider]');
     const afterImage = wrapper.querySelector('.compare__image--after');
     let isDragging = false;
-    let offsetX = 0;
+    let startX = 0;
+    let startLeft = 0;
 
     const setPosition = (clientX) => {
         const rect = wrapper.getBoundingClientRect();
-        const x = clientX - rect.left - offsetX;
-        const percent = clamp((x / rect.width) * 100, 0, 100);
-        afterImage.style.setProperty('--position', `${percent}%`);
-        divider.style.left = `${percent}%`;
+        const deltaX = clientX - startX;
+        const deltaPercent = (deltaX / rect.width) * 100;
+        const newPercent = clamp(startLeft + deltaPercent, 0, 100);
+        
+        afterImage.style.setProperty('--position', `${newPercent}%`);
+        divider.style.left = `${newPercent}%`;
     };
 
     const start = (event) => {
@@ -22,14 +25,14 @@ document.querySelectorAll('[data-compare]').forEach(wrapper => {
         const rect = wrapper.getBoundingClientRect();
         const clientX = event.touches ? event.touches[0].clientX : event.clientX;
         
-        // Вычисляем текущую позицию divider
-        const currentPercent = parseFloat(divider.style.left) || 50;
-        const currentX = (currentPercent / 100) * rect.width;
+        // Сохраняем начальную точку касания
+        startX = clientX;
         
-        // Вычисляем смещение от точки касания до центра divider
-        offsetX = clientX - rect.left - currentX;
+        // Получаем текущую позицию из CSS переменной
+        const currentPosition = afterImage.style.getPropertyValue('--position');
+        startLeft = currentPosition ? parseFloat(currentPosition) : 50;
         
-        setPosition(clientX);
+        // Не устанавливаем позицию сразу, чтобы избежать прыжка
     };
 
     const move = (event) => {
@@ -45,7 +48,6 @@ document.querySelectorAll('[data-compare]').forEach(wrapper => {
             event.preventDefault();
         }
         isDragging = false;
-        offsetX = 0;
     };
 
     divider.addEventListener('mousedown', start);
