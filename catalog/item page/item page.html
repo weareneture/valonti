@@ -11,14 +11,27 @@
 
 <body>
 
-    <section class="">
-    <div class="">
-    </div>
-    </section>
+    <section class="hero">
+      <div class="hero__header">
+        <p class="hero__subtitle">Обеденный стол</p>
+        <h1 class="hero__title">AGISUM</h1>
+      </div>
 
-    <section class="">
-        <div class="">
+      <div class="hero__visual">
+        <button class="hero__nav hero__nav--prev" type="button" aria-label="Предыдущий вариант">
+          <span class="hero__nav-icon">←</span>
+        </button>
+
+        <div class="hero__stage">
+          <img class="hero__image" src="" alt="AGISUM" data-hero-image>
         </div>
+
+        <button class="hero__nav hero__nav--next" type="button" aria-label="Следующий вариант">
+          <span class="hero__nav-icon">→</span>
+        </button>
+      </div>
+
+      <div class="hero__palette" data-hero-palette></div>
     </section>
 
     <section class="section__utp">
@@ -44,6 +57,93 @@
         </div>
 
     </section>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const slides = [
+      {
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/agisum-hero-1.png',
+        palette: [
+          {
+            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/aglomerat-dark-mramor.png',
+            color: '#1c1c1c',
+            title: 'Столешница',
+            desc: 'Агломерат: тёмный мрамор'
+          },
+          {
+            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/nitrid-serebro.png',
+            color: '#d8d8d8',
+            title: 'Опора',
+            desc: 'Нитрид титана: серебро'
+          },
+        ],
+      },
+      {
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/agisum-hero-1.png',
+        palette: [
+          {
+            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/aglomerat-dark-mramor.png',
+            color: '#f2f2f2',
+            title: 'Столешница',
+            desc: 'Кварц: светлый камень'
+          },
+          {
+            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/nitrid-serebro.png',
+            color: '#8c7b6a',
+            title: 'Опора',
+            desc: 'Металл: бронза'
+          },
+        ],
+      },
+    ];
 
+    const imageEl = document.querySelector('[data-hero-image]');
+    const paletteEl = document.querySelector('[data-hero-palette]');
+    const prevBtn = document.querySelector('.hero__nav--prev');
+    const nextBtn = document.querySelector('.hero__nav--next');
+
+    let active = 0;
+
+    const renderPalette = (palette) => {
+      paletteEl.innerHTML = '';
+      palette.forEach((item) => {
+        const swatch = document.createElement('button');
+        swatch.className = 'hero__swatch';
+        swatch.type = 'button';
+        if (item.color) swatch.style.setProperty('--swatch-color', item.color);
+        if (item.image) swatch.style.setProperty('--swatch-image', `url('${item.image}')`);
+        swatch.innerHTML = `
+          <span class="hero__swatch-dot"></span>
+          <span class="hero__swatch-tooltip">
+            <span class="hero__swatch-title">${item.title}</span>
+            <span class="hero__swatch-desc">${item.desc}</span>
+          </span>
+        `;
+        paletteEl.appendChild(swatch);
+      });
+    };
+
+    const renderSlide = (index) => {
+      const slide = slides[index];
+      imageEl.src = slide.image;
+      renderPalette(slide.palette);
+    };
+
+    const goPrev = () => {
+      active = (active - 1 + slides.length) % slides.length;
+      renderSlide(active);
+    };
+
+    const goNext = () => {
+      active = (active + 1) % slides.length;
+      renderSlide(active);
+    };
+
+    prevBtn.addEventListener('click', goPrev);
+    nextBtn.addEventListener('click', goNext);
+
+    renderSlide(active);
+  });
+</script>
 
 </body>
+</html>
