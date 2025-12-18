@@ -9,11 +9,11 @@ document.querySelectorAll('[data-compare]').forEach(wrapper => {
     let initialPercent = 0;
 
     const setPosition = (clientX) => {
-        const rect = wrapper.getBoundingClientRect();
-        const percent = clamp(((clientX - rect.left) / rect.width) * 100, 0, 100);
+    const rect = wrapper.getBoundingClientRect();
+    const percent = clamp(((clientX - rect.left) / rect.width) * 100, 0, 100);
         
-        afterImage.style.setProperty('--position', `${percent}%`);
-        divider.style.left = `${percent}%`;
+    afterImage.style.setProperty('--position', `${percent}%`);
+    divider.style.left = `${percent}%`;
     };
 
     const start = (event) => {
@@ -33,17 +33,17 @@ document.querySelectorAll('[data-compare]').forEach(wrapper => {
         const currentX = dividerCenterX - rect.left;
         initialPercent = clamp((currentX / rect.width) * 100, 0, 100);
         
-        isDragging = true;
+    isDragging = true;
         
         // НЕ меняем позицию при start - это предотвращает прыжок
     };
 
     const move = (event) => {
-        if (!isDragging) return;
+    if (!isDragging) return;
         event.preventDefault();
         event.stopPropagation();
         
-        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
         const rect = wrapper.getBoundingClientRect();
         
         // Вычисляем смещение от начальной точки

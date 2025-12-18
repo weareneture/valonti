@@ -8,7 +8,7 @@
 html,
 body {
   height: 100%;
-}article
+}
 
 body {
   margin: 0;
@@ -47,9 +47,9 @@ body {
   font-family: "RF Dewi";
   font-size: 48px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 52px; /* 108.333% */
-  letter-spacing: -1.44px;
+  letter-spacing: -1.1px;
 }
 
 .hero__visual {
@@ -58,19 +58,19 @@ body {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 16px;
-  padding: 16px 0;
+  padding: 20px 4px 28px
 }
 
 .hero__stage {
+  margin: auto;
   position: relative;
   background: transparent;
-  border-radius: 16px;
-  padding: clamp(12px, 3vw, 32px);
+  padding: 24px 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-height: 220px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  max-height: 180px;
+  max-width: 620px;
 }
 
 .hero__image {
@@ -78,18 +78,80 @@ body {
   max-height: 100%;
   object-fit: contain;
   display: block;
+  will-change: transform, opacity;
+}
+
+.hero__image--out-left {
+  animation: hero-image-out-left 280ms ease forwards;
+}
+
+.hero__image--out-right {
+  animation: hero-image-out-right 280ms ease forwards;
+}
+
+.hero__image--in-left {
+  animation: hero-image-in-left 280ms ease forwards;
+}
+
+.hero__image--in-right {
+  animation: hero-image-in-right 280ms ease forwards;
+}
+
+@keyframes hero-image-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+
+@keyframes hero-image-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+@keyframes hero-image-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hero-image-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .hero__nav {
-  width: 48px;
+  width: 38px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.25); 
+  background: transparent;
   color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
@@ -105,16 +167,61 @@ body {
 }
 
 .hero__nav-icon {
+  margin-top: -4px;
   font-size: 18px;
   line-height: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .hero__palette {
   margin-top: 20px;
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
   flex-wrap: wrap;
+}
+
+.hero__pagination {
+  width: 100%;
+  margin-top: 0px;
+  display: flex;
+  justify-content: center;
+  gap: 0px;
+  min-height: 20px;
+}
+
+.hero__dot {
+  border: none;
+  background: transparent;
+  width: 10px;   /* большой hit-area */
+  height: 10px;  /* большой hit-area */
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__dot::before {
+  content: "";
+  width: 4px;   /* минимальная точка */
+  height: 4px;  /* минимальная точка */
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  display: block;
+}
+
+.hero__dot.is-active::before {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* по умолчанию пагинация скрыта на десктопе */
+@media (min-width: 769px) {
+  .hero__pagination {
+    display: none;
+  }
 }
 
 .hero__swatch {
@@ -154,7 +261,7 @@ body {
 .hero__swatch-tooltip {
   position: absolute;
   left: 50%;
-  bottom: -40px;
+  bottom: -38px;
   transform: translateX(-50%);
   min-width: 180px;
   max-width: 220px;
@@ -164,7 +271,6 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
   z-index: 5;
 }
 
@@ -175,13 +281,13 @@ body {
 
 .hero__swatch-title {
   display: block;
-  color: rgba(255, 255, 255, 0.60);
+  color: #fff;
   text-align: center;
   font-family: "RF Dewi";
-  font-size: 12px;
+  font-size: 10px;
   font-style: normal;
   font-weight: 400;
-  line-height: 16px; /* 114.286% */
+  line-height: 14px; /* 140% */
 }
 
 .hero__swatch-desc {
@@ -203,14 +309,14 @@ body {
   .hero__visual {
     grid-template-columns: 1fr;
     gap: 8px;
+    padding: 0px;
   }
 
   .hero__nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.55);
+    display: none;
   }
+
+  /* стрелки на мобилке скрываем, используем свайп + пагинацию */
 
   .hero__nav--prev {
     left: 8px;
@@ -221,8 +327,24 @@ body {
   }
 
   .hero__stage {
-    padding: 16px;
-    min-height: 260px;
+    padding: 8px 0px 12px;
+    min-height: 100px;
+    touch-action: pan-y;
+  }
+
+  .hero__pagination {
+    display: flex;
+  }
+}
+
+/* Тач-устройства (мобилка/планшет, включая ландшафт): показываем пагинацию и скрываем стрелки */
+@media (hover: none) and (pointer: coarse) {
+  .hero__nav {
+    display: none !important;
+  }
+
+  .hero__pagination {
+    display: flex !important;
   }
 }
 

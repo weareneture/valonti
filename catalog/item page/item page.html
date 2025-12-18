@@ -31,6 +31,7 @@
         </button>
       </div>
 
+      <div class="hero__pagination" data-hero-pagination aria-label="Пагинация вариантов"></div>
       <div class="hero__palette" data-hero-palette></div>
     </section>
 
@@ -58,93 +59,205 @@
 
     </section>
     
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const slides = [
-      {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/agisum-hero-1.png',
-        palette: [
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const slides = [
           {
-            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/aglomerat-dark-mramor.png',
-            color: '#1c1c1c',
-            title: 'Столешница',
-            desc: 'Агломерат: тёмный мрамор'
+            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/agisum-hero-1.png',
+            palette: [
+              {
+                image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/aglomerat-dark-mramor.png',
+                color: '#1c1c1c',
+                title: 'Столешница',
+                desc: 'Агломерат: тёмный мрамор'
+              },
+              {
+                image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/nitrid-serebro.png',
+                color: '#d8d8d8',
+                title: 'Опора',
+                desc: 'Нитрид титана: серебро'
+              },
+            ],
           },
           {
-            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/nitrid-serebro.png',
-            color: '#d8d8d8',
-            title: 'Опора',
-            desc: 'Нитрид титана: серебро'
+            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/agisum-hero-2.png',
+            palette: [
+              {
+                /*image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/aglomerat-dark-mramor.png',*/
+                color: '#f2f2f2',
+                title: 'Столешница',
+                desc: 'Кварц: светлый камень'
+              },
+              {
+                /*image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/nitrid-serebro.png',*/
+                color: '#8c7b6a',
+                title: 'Опора',
+                desc: 'Металл: бронза'
+              },
+            ],
           },
-        ],
-      },
-      {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/agisum-hero-1.png',
-        palette: [
-          {
-            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/aglomerat-dark-mramor.png',
-            color: '#f2f2f2',
-            title: 'Столешница',
-            desc: 'Кварц: светлый камень'
-          },
-          {
-            image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/item%20page/hero/swatches/nitrid-serebro.png',
-            color: '#8c7b6a',
-            title: 'Опора',
-            desc: 'Металл: бронза'
-          },
-        ],
-      },
-    ];
+        ];
+    
+        const imageEl = document.querySelector('[data-hero-image]');
+        const paletteEl = document.querySelector('[data-hero-palette]');
+        const paginationEl = document.querySelector('[data-hero-pagination]');
+        const prevBtn = document.querySelector('.hero__nav--prev');
+        const nextBtn = document.querySelector('.hero__nav--next');
+        const stageEl = document.querySelector('.hero__stage');
+    
+        let active = 0;
+        let isAnimating = false;
+    
+        const updatePagination = () => {
+          if (!paginationEl) return;
+          const dots = paginationEl.querySelectorAll('.hero__dot');
+          dots.forEach((dot, idx) => {
+            const isActive = idx === active;
+            dot.classList.toggle('is-active', isActive);
+            if (isActive) {
+              dot.setAttribute('aria-current', 'true');
+            } else {
+              dot.removeAttribute('aria-current');
+            }
+          });
+        };
 
-    const imageEl = document.querySelector('[data-hero-image]');
-    const paletteEl = document.querySelector('[data-hero-palette]');
-    const prevBtn = document.querySelector('.hero__nav--prev');
-    const nextBtn = document.querySelector('.hero__nav--next');
+        const renderPagination = () => {
+          if (!paginationEl) return;
+          paginationEl.innerHTML = '';
 
-    let active = 0;
+          slides.forEach((_, idx) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'hero__dot';
+            dot.setAttribute('aria-label', `Вариант ${idx + 1}`);
+            dot.addEventListener('click', () => {
+              if (idx === active) return;
+              const direction = idx > active ? 'next' : 'prev';
+              animateTo(idx, direction);
+            });
+            paginationEl.appendChild(dot);
+          });
 
-    const renderPalette = (palette) => {
-      paletteEl.innerHTML = '';
-      palette.forEach((item) => {
-        const swatch = document.createElement('button');
-        swatch.className = 'hero__swatch';
-        swatch.type = 'button';
-        if (item.color) swatch.style.setProperty('--swatch-color', item.color);
-        if (item.image) swatch.style.setProperty('--swatch-image', `url('${item.image}')`);
-        swatch.innerHTML = `
-          <span class="hero__swatch-dot"></span>
-          <span class="hero__swatch-tooltip">
-            <span class="hero__swatch-title">${item.title}</span>
-            <span class="hero__swatch-desc">${item.desc}</span>
-          </span>
-        `;
-        paletteEl.appendChild(swatch);
+          updatePagination();
+        };
+
+        const renderPalette = (palette) => {
+          paletteEl.innerHTML = '';
+          palette.forEach((item) => {
+            const swatch = document.createElement('button');
+            swatch.className = 'hero__swatch';
+            swatch.type = 'button';
+            if (item.color) swatch.style.setProperty('--swatch-color', item.color);
+            if (item.image) swatch.style.setProperty('--swatch-image', `url('${item.image}')`);
+            swatch.innerHTML = `
+              <span class="hero__swatch-dot"></span>
+              <span class="hero__swatch-tooltip">
+                <span class="hero__swatch-title">${item.title}</span>
+                <span class="hero__swatch-desc">${item.desc}</span>
+              </span>
+            `;
+            paletteEl.appendChild(swatch);
+          });
+        };
+    
+        const renderSlideInstant = (index) => {
+          const slide = slides[index];
+          imageEl.src = slide.image;
+          renderPalette(slide.palette);
+          updatePagination();
+        };
+    
+        const animateTo = (nextIndex, direction) => {
+          if (isAnimating || nextIndex === active) return;
+          isAnimating = true;
+    
+          const outClass = direction === 'next' ? 'hero__image--out-left' : 'hero__image--out-right';
+          const inClass = direction === 'next' ? 'hero__image--in-right' : 'hero__image--in-left';
+    
+          const handleOutEnd = () => {
+            imageEl.removeEventListener('animationend', handleOutEnd);
+            imageEl.classList.remove(outClass);
+    
+            active = nextIndex;
+            const slide = slides[active];
+            imageEl.src = slide.image;
+            renderPalette(slide.palette);
+            updatePagination();
+    
+            imageEl.classList.add(inClass);
+            imageEl.addEventListener('animationend', handleInEnd, { once: true });
+          };
+    
+          const handleInEnd = () => {
+            imageEl.classList.remove(inClass);
+            isAnimating = false;
+          };
+    
+          imageEl.addEventListener('animationend', handleOutEnd);
+          imageEl.classList.add(outClass);
+        };
+    
+        const goPrev = () => {
+          const next = (active - 1 + slides.length) % slides.length;
+          animateTo(next, 'prev');
+        };
+    
+        const goNext = () => {
+          const next = (active + 1) % slides.length;
+          animateTo(next, 'next');
+        };
+    
+        prevBtn.addEventListener('click', goPrev);
+        nextBtn.addEventListener('click', goNext);
+
+        // свайп по изображению (мобильная версия/тач)
+        let swipeStartX = 0;
+        let swipeStartY = 0;
+        let swiping = false;
+
+        const swipeThreshold = 28; // px
+
+        const onPointerDown = (e) => {
+          // только основной палец/кнопка
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          swiping = true;
+          swipeStartX = e.clientX;
+          swipeStartY = e.clientY;
+          try { stageEl.setPointerCapture(e.pointerId); } catch (_) {}
+        };
+
+        const onPointerUp = (e) => {
+          if (!swiping) return;
+          swiping = false;
+
+          const dx = e.clientX - swipeStartX;
+          const dy = e.clientY - swipeStartY;
+
+          // если вертикаль доминирует — игнорируем (чтобы скролл работал)
+          if (Math.abs(dy) > Math.abs(dx)) return;
+          if (Math.abs(dx) < swipeThreshold) return;
+
+          if (dx < 0) {
+            goNext();
+          } else {
+            goPrev();
+          }
+        };
+
+        const onPointerCancel = () => { swiping = false; };
+
+        if (stageEl) {
+          stageEl.addEventListener('pointerdown', onPointerDown);
+          stageEl.addEventListener('pointerup', onPointerUp);
+          stageEl.addEventListener('pointercancel', onPointerCancel);
+          stageEl.addEventListener('pointerleave', onPointerCancel);
+        }
+    
+        renderPagination();
+        renderSlideInstant(active);
       });
-    };
-
-    const renderSlide = (index) => {
-      const slide = slides[index];
-      imageEl.src = slide.image;
-      renderPalette(slide.palette);
-    };
-
-    const goPrev = () => {
-      active = (active - 1 + slides.length) % slides.length;
-      renderSlide(active);
-    };
-
-    const goNext = () => {
-      active = (active + 1) % slides.length;
-      renderSlide(active);
-    };
-
-    prevBtn.addEventListener('click', goPrev);
-    nextBtn.addEventListener('click', goNext);
-
-    renderSlide(active);
-  });
-</script>
+    </script>
 
 </body>
 </html>
