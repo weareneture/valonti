@@ -1,0 +1,178 @@
+<div class="factura-section">
+    <div class="factura-section__header">
+        <div class="factura-section__category">[Материалы]</div>
+        <h2 class="factura-section__title">Честная фактура</h2>
+    </div>
+    
+    <div class="factura-tiles">
+        <div class="factura-tile">
+            <div class="factura-tile__image">
+                <!-- Здесь будет изображение для Металл -->
+            </div>
+            <div class="factura-tile__content">
+                <h3 class="factura-tile__title">Металл</h3>
+                <p class="factura-tile__description">Ювелирная точность и авторские покрытия безупречной эстетики</p>
+            </div>
+        </div>
+        
+        <div class="factura-tile">
+            <div class="factura-tile__image">
+                <!-- Здесь будет изображение для Стекло -->
+            </div>
+            <div class="factura-tile__content">
+                <h3 class="factura-tile__title">Стекло</h3>
+                <p class="factura-tile__description">Игра света и формы, превращающая материал в акцент</p>
+            </div>
+        </div>
+        
+        <div class="factura-tile">
+            <div class="factura-tile__image">
+                <!-- Здесь будет изображение для Камень -->
+            </div>
+            <div class="factura-tile__content">
+                <h3 class="factura-tile__title">Камень</h3>
+                <p class="factura-tile__description">Природный рисунок, слэбы без изъянов, стыки как единый узор</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.factura-section {
+    width: 100%;
+    padding: 60px 20px;
+    background: #000;
+    color: #fff;
+}
+
+.factura-section__header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.factura-section__category {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 12px;
+}
+
+.factura-section__title {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.factura-tiles {
+    display: flex;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 600px;
+}
+
+.factura-tile {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #1a1a1a;
+}
+
+.factura-tile__image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.factura-tile__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    z-index: 2;
+}
+
+.factura-tile__title {
+    margin: 0 0 12px 0;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.factura-tile__description {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* Анимация при наведении */
+.factura-tiles:hover .factura-tile {
+    flex: 0.7;
+}
+
+.factura-tiles .factura-tile:hover {
+    flex: 1.6;
+}
+
+.factura-tile:hover .factura-tile__image {
+    transform: scale(1.05);
+    filter: grayscale(0%);
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .factura-tiles {
+        height: 500px;
+        gap: 16px;
+    }
+    
+    .factura-tile__content {
+        padding: 30px;
+    }
+    
+    .factura-tile__title {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .factura-section {
+        padding: 40px 16px;
+    }
+    
+    .factura-section__title {
+        font-size: 36px;
+    }
+    
+    .factura-tiles {
+        flex-direction: column;
+        height: auto;
+        gap: 20px;
+    }
+    
+    .factura-tile {
+        height: 400px;
+        flex: none;
+    }
+    
+    .factura-tiles:hover .factura-tile {
+        flex: none;
+    }
+    
+    .factura-tiles .factura-tile:hover {
+        flex: none;
+        height: 450px;
+    }
+}
+</style>
+

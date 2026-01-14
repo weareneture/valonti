@@ -1,0 +1,156 @@
+<div class='fixed-block-buy' onclick="openTildaPopup('buyitempopup')">
+    <div class='text'>
+        <p class='item-name-buy'>Обеденный стол Agisum</p>
+        <p class='item-price-buy'>От 320 000 ₽</p>
+    </div>
+    <button class='item-button-buy'>Заказать</button>
+</div>
+
+<style>
+    
+    .fixed-block-buy {
+        position: fixed;
+        z-index: 99;
+        left: 50%;
+        bottom: 24px;
+        border-radius: 8px;
+        /*border: 1px solid rgba(255, 255, 255, 0.04);*/
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        display: flex;
+        gap: 16px;
+        flex-direction: row;
+        width: 340px;
+        padding: 8px 8px 8px 16px;
+        justify-content: space-between;
+        align-items: center;
+        pointer-events: auto;
+    }
+    
+    /* База: скрыто и БЕЗ анимации (чтобы не мигало при загрузке) */
+    .fixed-block-buy{
+      opacity: 0;
+      transform: translateX(-50%) translateY(24px);
+      pointer-events: none;
+      visibility: hidden;
+      transition: none;
+      will-change: opacity, transform;
+    }
+    
+    /* Когда JS готов — включаем анимацию */
+    .fixed-block-buy.is-ready{
+      visibility: visible;
+      transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
+    }
+    
+    /* Показ */
+    .fixed-block-buy.is-visible{
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+    
+    .text {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex: 1 0 0;
+        flex-direction: row;
+    }
+    
+    .item-name-buy {
+        color: var(--0, #FFF);
+        font-family: "RF Dewi";
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 18px; /* 128.571% */
+        letter-spacing: -0.14px;
+    }
+    
+    .item-price-buy {
+        color: var(--0, #FFF);
+        font-family: "RF Dewi";
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 18px; /* 128.571% */
+        letter-spacing: -0.14px;
+        opacity: 0.6;
+    }
+    
+    .item-button-buy {
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.40);
+        background: #FFF;
+        display: flex;
+        padding: 5px 12px 6px 12px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #0F0F0F;
+        text-align: center;
+        font-family: "RF Dewi";
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px; /* 166.667% */
+        transition: all 0.6s;
+        cursor: pointer;
+    }
+    
+    .t-beforeafter__handle {
+        z-index: 6;
+    }
+    
+    .fixed-block-buy:hover {
+        box-shadow: 0 8px 64px 0 rgba(255, 255, 255, 0.10);
+    }
+    .item-button-buy:hover {
+        background: #d8d8d8;
+    }
+    
+    @media(max-width:768px) {
+        .fixed-block-buy {
+            /*background: rgb(0 0 0);*/
+            width: calc(100% - 79px);
+            bottom: 12px !important;
+            padding: 8px 8px 8px 12px;
+        }
+        .text {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .item-price-buy {
+            font-size: 10px;
+            line-height: 14px;
+        }
+        .item-button-buy {
+            font-size: 10px;
+        }
+    }
+    
+</style>
+
+
+
+<script>
+(function () {
+  const block = document.querySelector('.fixed-block-buy');
+  if (!block) return;
+
+  const SHOW_AT = 200;
+
+  function toggle() {
+    const y = window.pageYOffset || document.documentElement.scrollTop;
+    block.classList.toggle('is-visible', y > SHOW_AT);
+  }
+
+  // 1) Сразу ставим "готов" после загрузки DOM, но без рывка
+  // 2) В следующем кадре включаем логику скролла
+  block.classList.add('is-ready');
+  requestAnimationFrame(toggle);
+
+  window.addEventListener('scroll', toggle, { passive: true });
+})();
+</script>

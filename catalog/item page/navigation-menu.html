@@ -1,0 +1,322 @@
+<nav class="navigation-menu">
+  <div class="navigation-menu__container">
+    <!-- Левая часть меню -->
+    <div class="navigation-menu__left">
+      <a href="https://valonti.ru/about" class="navigation-menu__link">О компании</a>
+      <a href="https://valonti.ru/materials" class="navigation-menu__link">О компании</a>
+      <a href="https://valonti.ru/designers" class="navigation-menu__link">Дизайнерам</a>
+      <a href="https://valonti.ru/catalog" class="navigation-menu__link">Каталог</a>
+    </div>
+
+    <!-- Центральная часть - логотип -->
+    <div class="navigation-menu__center">
+      <a href="https://valonti.ru/" class="navigation-menu__logo">
+        <svg width="130" height="20" viewBox="0 0 130 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M127.261 19.999V0H130V19.999H127.261Z" fill="white"/>
+          <path d="M112.281 19.9982V1.41593C111.965 1.33726 111.649 1.27827 111.334 1.23894C111.018 1.1996 110.663 1.17994 110.269 1.17994L106.274 2.09439L106.097 0H121.335L121.187 2.09439L117.163 1.17994C116.768 1.17994 116.413 1.1996 116.098 1.23894C115.782 1.27827 115.466 1.33726 115.151 1.41593V19.9982H112.281Z" fill="white"/>
+          <path d="M99.806 19.9982L86.751 3.71437H86.6318V20H85.3203V0H87.526L98.8821 14.2929H99.0013V0H100.313V19.9982H99.806Z" fill="white"/>
+          <path d="M78.4953 19.9982H68.4656C74.0048 19.9982 78.4953 15.5214 78.4953 9.99909C78.4953 4.47676 74.0048 1.1902e-05 68.4656 0C62.9263 0 58.4359 4.47675 58.4359 9.99909C58.4359 15.5214 62.9264 19.9982 68.4656 19.9982H58.4359V0H78.4953V19.9982Z" fill="white"/>
+          <path d="M42.0321 19.9982V0.00837204H44.9318V18.4052C45.4446 18.5429 45.9575 18.6707 46.4704 18.7887C47.003 18.8871 47.4567 18.9362 47.8315 18.9362L53.187 18.0218L52.832 19.9982H42.0321Z" fill="white"/>
+          <path d="M18.3383 19.9982L27.1254 0H27.5692L36.3563 19.9982H33.1314L30.9124 14.6889H22.1254L19.936 19.9982H18.3383ZM22.5692 13.5681H30.4391L26.5337 4.01143L22.5692 13.5681Z" fill="white"/>
+          <path d="M8.78709 19.9982L0 0H3.22489L9.73384 15.9867L15.5919 0H17.0712L9.26046 19.9982H8.78709Z" fill="white"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Правая часть меню -->
+    <div class="navigation-menu__right">
+      <a href="tel:+74951207535" class="navigation-menu__phone">
+        <span class="navigation-menu__phone-dot">•</span> 8 (495) 120-75-35
+      </a>
+      <div class="navigation-menu__social">
+        <a href="#" class="navigation-menu__social-link" aria-label="Telegram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  #allrecords a {color: #fff !important;}
+  .navigation-menu {
+      position: fixed;
+      z-index: 1000;
+      background: #0000007d;
+      backdrop-filter: blur(20px);
+      padding: 10px 20px;
+      top: 12px;
+      border-radius: 8px;
+      max-width: 964px;
+      width: 100%;
+      margin: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .navigation-menu--hidden {
+      transform: translateX(-50%) translateY(-120%);
+      opacity: 0;
+      pointer-events: none;
+  }
+  
+  .navigation-menu__container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  /* Левая часть */
+  .navigation-menu__left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex: 1;
+  }
+  
+  a.navigation-menu__phone {
+      color: #fff !important;
+  }
+  
+  .navigation-menu__link {
+    color: #FFFFFF;
+    font-family: "RF Dewi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .navigation-menu__link:hover {
+    opacity: 0.7;
+  }
+  
+  
+  /* Центральная часть - логотип */
+  .navigation-menu__center {
+    flex: 0 0 auto;
+  }
+  
+  .navigation-menu__logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .navigation-menu__logo:hover {
+    opacity: 0.8;
+  }
+  
+  .navigation-menu__logo svg {
+    display: block;
+    width: 130px;
+    height: 10px;
+  }
+  
+  /* Правая часть */
+  .navigation-menu__right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  
+  .navigation-menu__phone {
+    color: #FFFFFF;
+    font-family: "RF Dewi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .navigation-menu__phone:hover {
+    opacity: 0.7;
+  }
+  
+  .navigation-menu__phone-dot {
+    display: inline-block;
+    animation: phone-dot-blink 3s ease-in-out infinite;
+  }
+  
+  @keyframes phone-dot-blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .navigation-menu__social {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .navigation-menu__social-link {
+      width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: transparent;
+  }
+  
+  .navigation-menu__social-link:hover {
+    border-color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+    color: #FFFFFF;
+  }
+  
+  .navigation-menu__social-link svg {
+      margin-top: 1px;
+      width: 8px;
+    height: 8px;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 1024px) {
+    .navigation-menu__container {
+      gap: 16px;
+    }
+  
+    .navigation-menu__left {
+      gap: 20px;
+    }
+  
+    .navigation-menu__link {
+      font-size: 12px;
+    }
+  
+    .navigation-menu__logo svg {
+      width: 110px;
+      height: 14px;
+    }
+  
+    .navigation-menu__phone {
+      font-size: 12px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .navigation-menu {
+      padding: 12px 16px;
+    }
+  
+    .navigation-menu__container {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  
+    .navigation-menu__left {
+      order: 1;
+      width: 100%;
+      justify-content: space-between;
+      gap: 12px;
+    }
+  
+    .navigation-menu__center {
+      order: 0;
+      flex: 0 0 auto;
+    }
+  
+    .navigation-menu__right {
+      order: 2;
+      width: 100%;
+      justify-content: space-between;
+      gap: 12px;
+    }
+  
+    .navigation-menu__link {
+      font-size: 11px;
+    }
+  
+    .navigation-menu__logo svg {
+      width: 100px;
+      height: 15px;
+    }
+  
+    .navigation-menu__phone {
+      font-size: 11px;
+    }
+  
+    .navigation-menu__social-link {
+      width: 36px;
+      height: 36px;
+    }
+  
+    .navigation-menu__social-link svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  </style>
+
+  <script>
+  (function() {
+    let lastScrollTop = 0;
+    let scrollThreshold = 10;
+    let ticking = false;
+    const nav = document.querySelector('.navigation-menu');
+
+    if (!nav) return;
+
+    function handleScroll() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop < scrollThreshold) {
+        nav.classList.remove('navigation-menu--hidden');
+        lastScrollTop = scrollTop;
+        ticking = false;
+        return;
+      }
+
+      if (Math.abs(lastScrollTop - scrollTop) < scrollThreshold) {
+        ticking = false;
+        return;
+      }
+
+      if (scrollTop > lastScrollTop) {
+        nav.classList.add('navigation-menu--hidden');
+      } else {
+        nav.classList.remove('navigation-menu--hidden');
+      }
+
+      lastScrollTop = scrollTop;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        window.requestAnimationFrame(handleScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+  </script>

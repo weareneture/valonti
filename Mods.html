@@ -1,0 +1,158 @@
+<script>
+    (function() {
+        'use strict';
+        
+        // Финальные значения для каждого класса (можно изменить позже)
+        const finalValues = {
+            'num-up-1': 150,
+            'num-up-2': 2500,
+            'num-up-3': 700,
+            'num-up-4': 25000
+        };
+        
+        // Функция для форматирования числа с пробелами для тысяч
+        function formatNumber(num) {
+            return Math.floor(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        }
+        
+        // Функция для обновления текста элемента с сохранением структуры
+        function updateElementText(element, text) {
+            // Если элемент содержит только текст (нет дочерних элементов), просто заменяем текст
+            if (element.children.length === 0) {
+                element.textContent = text;
+            } else {
+                // Если есть дочерние элементы, заменяем только первый текстовый узел
+                const walker = document.createTreeWalker(
+                    element,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+                const firstTextNode = walker.nextNode();
+                if (firstTextNode) {
+                    firstTextNode.textContent = text;
+                } else {
+                    // Если текстовых узлов нет, вставляем текст в начало
+                    element.insertBefore(document.createTextNode(text), element.firstChild);
+                }
+            }
+        }
+        
+        // Функция для плавной анимации числа
+        function animateNumber(element, startValue, endValue, duration, callback) {
+            const startTime = performance.now();
+            const startNum = startValue;
+            const endNum = endValue;
+            
+            // Устанавливаем начальное значение 1 только в момент начала анимации
+            updateElementText(element, formatNumber(1));
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Используем easing функцию для плавности (ease-out)
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const currentValue = startNum + (endNum - startNum) * easeProgress;
+                
+                updateElementText(element, formatNumber(currentValue));
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    updateElementText(element, formatNumber(endValue));
+                    if (callback) callback();
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+        
+        // Функция инициализации
+        function initNumberAnimation() {
+            const classes = ['num-up-1', 'num-up-2', 'num-up-3', 'num-up-4'];
+            const elements = [];
+            
+            // Находим все элементы с нужными классами
+            classes.forEach(className => {
+                const foundElements = document.querySelectorAll('.' + className);
+                foundElements.forEach(el => {
+                    if (!el.dataset.animated) {
+                        elements.push({
+                            element: el,
+                            className: className,
+                            finalValue: finalValues[className] || 1000000
+                        });
+                    }
+                });
+            });
+            
+            if (elements.length === 0) {
+                return false;
+            }
+            
+            // Создаем IntersectionObserver
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.dataset.animated) {
+                        const elementData = elements.find(e => e.element === entry.target);
+                        if (elementData) {
+                            entry.target.dataset.animated = 'true';
+                            animateNumber(
+                                entry.target,
+                                1,
+                                elementData.finalValue,
+                                2000,
+                                null
+                            );
+                            observer.unobserve(entry.target);
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.5, // Элемент должен быть виден на 50%
+                rootMargin: '0px'
+            });
+            
+            // Наблюдаем за всеми элементами
+            elements.forEach(item => {
+                observer.observe(item.element);
+            });
+            
+            return true;
+        }
+        
+        // Инициализация с учетом особенностей Tilda
+        function tryInit() {
+            if (initNumberAnimation()) {
+                return true;
+            }
+            return false;
+        }
+        
+        // Пытаемся инициализировать сразу
+        if (tryInit()) {
+            return;
+        }
+        
+        // Если не получилось, пробуем после загрузки DOM
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(tryInit, 100);
+            });
+        } else {
+            setTimeout(tryInit, 100);
+        }
+        
+        // Дополнительная попытка после полной загрузки страницы
+        window.addEventListener('load', function() {
+            setTimeout(tryInit, 300);
+        });
+        
+        // Для Tilda: дополнительная попытка через некоторое время
+        setTimeout(tryInit, 500);
+        setTimeout(tryInit, 1000);
+    })();
+    </script>
+    
+    

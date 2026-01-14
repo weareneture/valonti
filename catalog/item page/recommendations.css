@@ -1,0 +1,282 @@
+/* Слайдер рекомендаций */
+.section__recommendations {
+  /*padding: 0px 24px;*/
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.container__recommendations {
+  width: 100%;
+}
+
+.recommendations__title {
+  margin: 0 0 32px;
+  color: #fff;
+  font-family: "RF Dewi";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  text-align: center;
+}
+
+.recommendations__slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow: visible; /* чтобы стрелки были видны */
+  cursor: grab;
+  user-select: none;
+}
+
+.recommendations__slider:active {
+  cursor: grabbing;
+}
+
+.recommendations__slider.dragging {
+  cursor: grabbing;
+}
+
+.recommendations__track {
+  flex: 1;
+  overflow: visible; /* видим части следующих карточек */
+  position: relative;
+}
+
+.recommendations__list {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s ease;
+  will-change: transform;
+  align-items: center;
+}
+
+.recommendations__list.dragging {
+  transition: none;
+}
+
+.recommendations__item {
+  flex: 0 0 auto;
+  width: calc((26.2% - 20px) / 2); /* 2 карточки на десктопе: (100% - gap) / 2 */
+  min-width: calc((26.2% - 20px) / 2);
+  max-width: calc((100% - 20px) / 2);
+}
+
+
+/* Стили карточек из каталога для слайдера */
+.recommendations__item.model__item {
+  overflow: hidden;
+  display: flex;
+  height: 320px;
+  padding: 20px;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  background: #181818;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  cursor: grab;
+  text-decoration: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.recommendations__item.model__item:active {
+  cursor: grabbing;
+}
+
+.recommendations__item.model__item:hover {
+  transform: scale(1.02);
+}
+
+.recommendations__item .model__img {
+  height: 90%;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.recommendations__item .model__content {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  width: calc(100% - 40px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.recommendations__item .model__content__left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recommendations__item .model__catname {
+  color: rgba(255, 255, 255, 0.60);
+  font-family: "RF Dewi";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  margin: 0;
+}
+
+.recommendations__item .model__title {
+  color: #FFF;
+  font-family: "RF Dewi";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.recommendations__item .model__price {
+  color: #FFF;
+  font-family: "RF Dewi";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  margin: 0;
+}
+
+.recommendations__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.2px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
+  z-index: 10; /* чтобы стрелки были поверх */
+}
+
+.recommendations__nav:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+.recommendations__nav:active {
+  transform: translateY(-50%) scale(0.98);
+}
+
+.recommendations__nav--prev {
+  left: -60px;
+}
+
+.recommendations__nav--next {
+  right: -60px;
+}
+
+
+.recommendations__nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.recommendations__nav svg {
+  display: block;
+  width: 18px;
+  height: 8px;
+}
+
+@media (max-width: 768px) {
+  .section__recommendations {
+    padding: 0;
+    overflow: visible; /* не блокируем видимость соседних карточек */
+  }
+
+  .container__recommendations {
+    overflow: visible; /* не блокируем видимость соседних карточек */
+    width: 100%; /* занимает всю ширину контентной зоны */
+    max-width: 100%; /* не превышает ширину контентной зоны */
+  }
+
+  .recommendations__title {
+    font-size: 20px;
+    margin-bottom: 24px;
+    padding: 0 16px;
+  }
+
+  .recommendations__slider {
+    gap: 0;
+    touch-action: pan-x; /* разрешаем горизонтальный свайп */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .recommendations__nav {
+    display: none; /* скрываем кнопки на мобилке */
+  }
+
+  .recommendations__track {
+    overflow: visible; /* показываем части соседних карточек */
+    touch-action: pan-x; /* разрешаем горизонтальный свайп */
+  }
+
+  .recommendations__list {
+    gap: 8px;
+    touch-action: pan-x; /* разрешаем горизонтальный свайп */
+    margin: 0; /* убираем возможные отступы */
+    padding: 0; /* убираем возможные отступы */
+  }
+
+  .recommendations__item {
+    width: 26.2%; /* ширина определяется содержимым */
+    min-width: 26.2%; /* минимальная ширина для видимости соседних */
+    flex-shrink: 0;
+    touch-action: pan-x; /* разрешаем горизонтальный свайп */
+  }
+
+  .recommendations__item.model__item {
+    height: 200px;
+    padding: 16px;
+    -webkit-tap-highlight-color: transparent; /* убираем подсветку при тапе на мобилке */
+    touch-action: pan-x; /* разрешаем горизонтальный свайп */
+  }
+
+  .recommendations__item .model__content {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: calc(100% - 32px);
+  }
+
+  .recommendations__item .model__content__left {
+    gap: 2px;
+  }
+
+  .recommendations__item .model__catname {
+    font-size: 10px;
+  }
+
+  .recommendations__item .model__title,
+  .recommendations__item .model__price {
+    font-size: 12px;
+  }
+
+  .recommendations__item.model__item:hover {
+    transform: none;
+  }
+
+  .recommendations__nav {
+    display: none; /* убираем стрелки на мобилке */
+  }
+}
