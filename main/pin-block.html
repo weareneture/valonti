@@ -1,0 +1,220 @@
+<section class="pin-block">
+  <div class="pin-block__wrap">
+    <div class="pin-block__media">
+      <img
+        src="https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?q=80&w=1400&auto=format&fit=crop"
+        alt="Интерьер"
+        class="pin-block__image"
+      />
+
+      <a class="pin-point" href="#" onclick="openTildaPopup('areolum'); return false;" style="--x: 28%; --y: 58%;">
+        <span class="pin-point__dot" aria-hidden="true"></span>
+        <div class="pin-point__card">
+          <img
+            src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=800&auto=format&fit=crop"
+            alt="Стол Areolum"
+          />
+          <div class="pin-point__content">
+            <h4>Стол Areolum</h4>
+            <p>Минималистичный стол из стекла и металла.</p>
+            <p class="pin-point__link">Подробнее</p>
+          </div>
+        </div>
+      </a>
+
+      <a class="pin-point" href="#" onclick="openTildaPopup('loft'); return false;" style="--x: 62%; --y: 36%;">
+        <span class="pin-point__dot" aria-hidden="true"></span>
+        <div class="pin-point__card">
+          <img
+            src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?q=80&w=800&auto=format&fit=crop"
+            alt="Перегородка Loft"
+          />
+          <div class="pin-point__content">
+            <h4>Перегородка Loft</h4>
+            <p>Зонирует пространство, сохраняя свет.</p>
+            <p class="pin-point__link">Подробнее</p>
+          </div>
+        </div>
+      </a>
+
+      <a class="pin-point" href="#" onclick="openTildaPopup('solvanor'); return false;" style="--x: 78%; --y: 70%;">
+        <span class="pin-point__dot" aria-hidden="true"></span>
+        <div class="pin-point__card">
+          <img
+            src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=800&auto=format&fit=crop"
+            alt="Кресло Solvanor"
+          />
+          <div class="pin-point__content">
+            <h4>Кресло Solvanor</h4>
+            <p>Комфортное кресло для переговорной.</p>
+            <p class="pin-point__link">Подробнее</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+    .pin-block {
+      padding: 40px 0;
+    }
+  
+    .pin-block__wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+  
+    .pin-block__media {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+  
+    .pin-block__image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  
+    .pin-point {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+  
+    .pin-point__dot {
+      position: relative;
+      width: 14px;
+      height: 14px;
+      aspect-ratio: 1 / 1;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 1px solid #ffffff;
+      background: #ffffff8c;
+      cursor: pointer;
+      outline: none;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+  
+    .pin-point__dot::before {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgb(255 255 255 / 50%);
+      animation: pin-pulse 2.4s ease-out infinite;
+    }
+  
+    .pin-point__card {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(30px);
+      overflow: hidden;
+      display: block;
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease,
+      transform 0.25s ease;
+    }
+  
+    .pin-point__card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+  
+    .pin-point__content {
+      padding: 12px 16px 16px;
+    }
+  
+    .pin-point__content h4 {
+      margin: 0 0 0px;
+      color: #FFF;
+      font-family: "RF Dewi";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px; /* 142.857% */
+    }
+  
+    .pin-point__content p {
+      margin: 0 0 6px;
+      color: rgba(255, 255, 255, 0.80);
+      font-family: "RF Dewi";
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 125%; /* 12.5px */
+    }
+  
+    .pin-point__link {
+      color: #FFF;
+      font-family: "RF Dewi";
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 125%; /* 12.5px */
+      text-decoration-line: underline;
+      text-decoration-style: solid;
+      text-decoration-skip-ink: auto;
+      text-decoration-thickness: 5%; /* 0.5px */
+      text-underline-offset: 25%; /* 2.5px */
+      text-underline-position: from-font;
+    }
+  
+    .pin-point:hover .pin-point__card,
+    .pin-point:focus .pin-point__card,
+    .pin-point:focus-visible .pin-point__card {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(10px, -50%);
+    }
+
+    .pin-point:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.6);
+      outline-offset: 4px;
+    }
+  
+    @keyframes pin-pulse {
+      0% {
+        transform: scale(0.6);
+        opacity: 0.9;
+      }
+      100% {
+        transform: scale(1.8);
+        opacity: 0;
+      }
+    }
+  
+    @media (max-width: 768px) {
+      .pin-point__card {
+        left: 50%;
+        top: calc(100% + 10px);
+        transform: translate(-50%, 0);
+      }
+  
+      .pin-point:hover .pin-point__card,
+      .pin-point:focus .pin-point__card,
+      .pin-point:focus-visible .pin-point__card {
+        transform: translate(-50%, 0);
+      }
+    }
+  </style>

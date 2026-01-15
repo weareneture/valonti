@@ -1,157 +1,153 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <title>Catalog valonti</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  .model__cat {
+    display: none;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 20px;
+  }
 
-  <!-- Основные стили -->
-  <link rel="stylesheet" href="styles.css" />
-</head>
+  .model__cat.active {
+    display: grid;
+  }
+</style>
 
-<body>
-    <main class="main">
-      <section class="category__list">
-        <div class="container__cat">
+<div class="category__tabs">
+  <button class="category__tab active" data-target="tables" type="button">Столы</button>
+  <button class="category__tab" data-target="mirrors" type="button">Зеркала</button>
+</div>
 
-          <div class="category__tabs">
-            <button class="category__tab active" data-target="tables">Столы</button>
-            <button class="category__tab" data-target="mirrors">Зеркала</button>
-          </div>
+<div class="model__cat active" data-category="tables">
 
-          <div class="model__cat active" data-category="tables">
+ <div class="model__item half" onclick="openTildaPopup('areolum')">
+  <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
+  <div class="model__content">
+    <div class="model__content__left">
+      <p class="model__catname">Стол</p>
+      <h2 class="model__title">Areolum</h2>
+    </div>
+    <div class="model__content__right">
+      <p class="model__price">от 320 000 ₽</p>
+    </div>
+  </div>
+ </div>
 
-            <div class="model__item half" onclick="openTildaPopup('areolum')">
-            <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
-            <div class="model__content">
-              <div class="model__content__left">
-                <p class="model__catname">Стол</p>
-                <h2 class="model__title">Areolum</h2>
-              </div>
-              <div class="model__content__right">
-                <p class="model__price">от 320 000 ₽</p>
-              </div>
-            </div>
-           </div>
+ <div class="model__item half" onclick="openTildaPopup('areolum')">
+  <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
+  <div class="model__content">
+    <div class="model__content__left">
+      <p class="model__catname">Стол</p>
+      <h2 class="model__title">Areolum</h2>
+    </div>
+    <div class="model__content__right">
+      <p class="model__price">от 320 000 ₽</p>
+    </div>
+  </div>
+ </div>
 
-           <div class="model__item half" onclick="openTildaPopup('areolum')">
-            <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
-            <div class="model__content">
-              <div class="model__content__left">
-                <p class="model__catname">Стол</p>
-                <h2 class="model__title">Areolum</h2>
-              </div>
-              <div class="model__content__right">
-                <p class="model__price">от 320 000 ₽</p>
-              </div>
-            </div>
-           </div>
+ <div class="model__item third" onclick="openTildaPopup('areolum')">
+  <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
+  <div class="model__content">
+    <div class="model__content__left">
+      <p class="model__catname">Стол</p>
+      <h2 class="model__title">Areolum</h2>
+    </div>
+    <div class="model__content__right">
+      <p class="model__price">от 320 000 ₽</p>
+    </div>
+  </div>
+ </div>
 
-           <div class="model__item third" onclick="openTildaPopup('areolum')">
-            <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
-            <div class="model__content">
-              <div class="model__content__left">
-                <p class="model__catname">Стол</p>
-                <h2 class="model__title">Areolum</h2>
-              </div>
-              <div class="model__content__right">
-                <p class="model__price">от 320 000 ₽</p>
-              </div>
-            </div>
-           </div>
+ <div class="model__item big" onclick="openTildaPopup('areolum')">
+  <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
+  <div class="model__content">
+    <div class="model__content__left">
+      <p class="model__catname">Стол</p>
+      <h2 class="model__title">Areolum</h2>
+    </div>
+    <div class="model__content__right">
+      <p class="model__price">от 320 000 ₽</p>
+    </div>
+  </div>
+ </div>
 
-           <div class="model__item big" onclick="openTildaPopup('areolum')">
-            <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png" alt="Areolum" class="model__img">
-            <div class="model__content">
-              <div class="model__content__left">
-                <p class="model__catname">Стол</p>
-                <h2 class="model__title">Areolum</h2>
-              </div>
-              <div class="model__content__right">
-                <p class="model__price">от 320 000 ₽</p>
-              </div>
-            </div>
-           </div>
+ </div>
 
-          </div>
+<div class="model__cat" data-category="mirrors">
 
-          <div class="model__cat" data-category="mirrors">
+  <div class="model__item half" onclick="openTildaPopup('areolum')">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Зеркало</p>
+        <h2 class="model__title">Arkulo</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">от 320 000 ₽</p>
+      </div>
+    </div>
+   </div>
 
-            <div class="model__item half" onclick="openTildaPopup('areolum')">
-              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
-              <div class="model__content">
-                <div class="model__content__left">
-                  <p class="model__catname">Зеркало</p>
-                  <h2 class="model__title">Arkulo</h2>
-                </div>
-                <div class="model__content__right">
-                  <p class="model__price">от 320 000 ₽</p>
-                </div>
-              </div>
-             </div>
+   <div class="model__item half" onclick="openTildaPopup('areolum')">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Зеркало</p>
+        <h2 class="model__title">Arkulo</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">от 320 000 ₽</p>
+      </div>
+    </div>
+   </div>
 
-             <div class="model__item half" onclick="openTildaPopup('areolum')">
-              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
-              <div class="model__content">
-                <div class="model__content__left">
-                  <p class="model__catname">Зеркало</p>
-                  <h2 class="model__title">Arkulo</h2>
-                </div>
-                <div class="model__content__right">
-                  <p class="model__price">от 320 000 ₽</p>
-                </div>
-              </div>
-             </div>
+   <div class="model__item third_s" onclick="openTildaPopup('areolum')">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Зеркало</p>
+        <h2 class="model__title">Arkulo</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">от 320 000 ₽</p>
+      </div>
+    </div>
+   </div>
 
-             <div class="model__item third_s" onclick="openTildaPopup('areolum')">
-              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
-              <div class="model__content">
-                <div class="model__content__left">
-                  <p class="model__catname">Зеркало</p>
-                  <h2 class="model__title">Arkulo</h2>
-                </div>
-                <div class="model__content__right">
-                  <p class="model__price">от 320 000 ₽</p>
-                </div>
-              </div>
-             </div>
+   <div class="model__item third_s" onclick="openTildaPopup('areolum')">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Зеркало</p>
+        <h2 class="model__title">Arkulo</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">от 320 000 ₽</p>
+      </div>
+    </div>
+   </div>
 
-             <div class="model__item third_s" onclick="openTildaPopup('areolum')">
-              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
-              <div class="model__content">
-                <div class="model__content__left">
-                  <p class="model__catname">Зеркало</p>
-                  <h2 class="model__title">Arkulo</h2>
-                </div>
-                <div class="model__content__right">
-                  <p class="model__price">от 320 000 ₽</p>
-                </div>
-              </div>
-             </div>
+   <div class="model__item third_s" onclick="openTildaPopup('areolum')">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Зеркало</p>
+        <h2 class="model__title">Arkulo</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">от 320 000 ₽</p>
+      </div>
+    </div>
+   </div>
 
-             <div class="model__item third_s" onclick="openTildaPopup('areolum')">
-              <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/arkulo.png" alt="Areolum" class="model__img">
-              <div class="model__content">
-                <div class="model__content__left">
-                  <p class="model__catname">Зеркало</p>
-                  <h2 class="model__title">Arkulo</h2>
-                </div>
-                <div class="model__content__right">
-                  <p class="model__price">от 320 000 ₽</p>
-                </div>
-              </div>
-             </div>
-
-          </div>
-
-        </div>
-      </section>
-    </main>
+</div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
+      function initCategoryTabs() {
         const tabs = document.querySelectorAll('.category__tab');
         const categories = document.querySelectorAll('.model__cat');
+
+        if (!tabs.length || !categories.length) {
+          return;
+        }
 
         tabs.forEach(tab => {
           tab.addEventListener('click', () => {
@@ -169,7 +165,13 @@
             });
           });
         });
-      });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCategoryTabs);
+      } else {
+        initCategoryTabs();
+      }
     </script>
 
   </body>

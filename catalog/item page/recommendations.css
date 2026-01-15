@@ -280,3 +280,19 @@
     display: none; /* убираем стрелки на мобилке */
   }
 }
+  }
+
+  .recommendations__item .model__title,
+  .recommendations__item .model__price {
+    font-size: 12px;
+  }
+
+  .recommendations__item.model__item:hover {
+    transform: none;
+  }
+
+  .recommendations__nav {
+    display: none; /* убираем стрелки на мобилке */
+  }
+}
+</style>
