@@ -7,7 +7,12 @@
         class="pin-block__image"
       />
 
-      <a class="pin-point" href="#" onclick="openTildaPopup('areolum'); return false;" style="--x: 28%; --y: 58%;">
+      <!-- 
+        Для каждой карточки укажите ОДИН из вариантов:
+        1. data-popup="ID_попапа" - для открытия popup через openTildaPopup()
+        2. data-href="/путь/к/странице.html" - для перехода по ссылке
+      -->
+      <a class="pin-point" href="javascript:void(0)" data-popup="areolum" style="--x: 28%; --y: 58%;">
         <span class="pin-point__dot" aria-hidden="true"></span>
         <div class="pin-point__card">
           <img
@@ -22,9 +27,9 @@
         </div>
       </a>
 
-      <a class="pin-point" href="#" onclick="openTildaPopup('loft'); return false;" style="--x: 62%; --y: 36%;">
+      <a class="pin-point" href="javascript:void(0)" data-popup="loft" style="--x: 62%; --y: 36%;">
         <span class="pin-point__dot" aria-hidden="true"></span>
-        <div class="pin-point__card">
+        <div class="pin-point__card f4">
           <img
             src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?q=80&w=800&auto=format&fit=crop"
             alt="Перегородка Loft"
@@ -37,9 +42,9 @@
         </div>
       </a>
 
-      <a class="pin-point" href="#" onclick="openTildaPopup('solvanor'); return false;" style="--x: 78%; --y: 70%;">
+      <a class="pin-point" href="javascript:void(0)" data-popup="solvanor" style="--x: 78%; --y: 70%;">
         <span class="pin-point__dot" aria-hidden="true"></span>
-        <div class="pin-point__card">
+        <div class="pin-point__card f5">
           <img
             src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=800&auto=format&fit=crop"
             alt="Кресло Solvanor"
@@ -56,165 +61,314 @@
 </section>
 
 <style>
-    .pin-block {
-      padding: 40px 0;
-    }
+  .pin-block {
+    padding: 40px 0;
+  }
+
+  .pin-block__wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .pin-block__media {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .pin-block__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .pin-point {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .pin-point__dot {
+    position: relative;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    background: #ffffff1f;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .pin-point__dot::before {
+    content: "";
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 1.5px solid rgb(255 255 255 / 50%);
+    animation: pin-pulse 2.4s ease-out infinite;
+  }
+
+  .pin-point__card {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(30px);
+    overflow: hidden;
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease,
+    transform 0.25s ease;
+  }
+
+  .pin-point__card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .pin-point__content {
+    padding: 10px 14px;
+  }
+
+  .pin-point__content h4 {
+    margin: 0 0 2px;
+    color: #FFF;
+    font-family: "RF Dewi";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+  }
+
+  .pin-point__content p {
+    margin: 0 0 8px;
+    color: rgba(255, 255, 255, 0.80);
+    font-family: "RF Dewi";
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125%; /* 12.5px */
+  }
+
+  .pin-point__link {
+    color: rgba(255, 255, 255, 0.80);
+    font-family: "RF Dewi";
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125%; /* 12.5px */
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: 5%; /* 0.5px */
+    text-underline-offset: 25%; /* 2.5px */
+    text-underline-position: from-font;
+    transition: opacity 0.4s ease;
+  }
   
-    .pin-block__wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
+  .pin-point__link:hover {
+      color: #FFF !important;
+      opacity: 100% !important;
+  }
+
+  .pin-point:hover .pin-point__card,
+  .pin-point:focus .pin-point__card,
+  .pin-point:focus-visible .pin-point__card {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(10px, -50%);
+  }
+
+  .pin-point:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 4px;
+  }
+
+  @keyframes pin-pulse {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.9;
     }
-  
-    .pin-block__media {
-      position: relative;
-      border-radius: 18px;
-      overflow: hidden;
-    }
-  
-    .pin-block__image {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-  
-    .pin-point {
-      position: absolute;
-      left: var(--x);
-      top: var(--y);
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      cursor: pointer;
-    }
-  
-    .pin-point__dot {
-      position: relative;
-      width: 14px;
-      height: 14px;
-      aspect-ratio: 1 / 1;
-      box-sizing: border-box;
-      border-radius: 50%;
-      border: 1px solid #ffffff;
-      background: #ffffff8c;
-      cursor: pointer;
-      outline: none;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-  
-    .pin-point__dot::before {
-      content: "";
-      position: absolute;
-      inset: -8px;
-      border-radius: 50%;
-      border: 1px solid rgb(255 255 255 / 50%);
-      animation: pin-pulse 2.4s ease-out infinite;
-    }
-  
-    .pin-point__card {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 200px;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(30px);
-      overflow: hidden;
-      display: block;
-      color: inherit;
-      text-decoration: none;
-      cursor: pointer;
+    100% {
+      transform: scale(1.5);
       opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.25s ease, visibility 0.25s ease,
-      transform 0.25s ease;
     }
-  
-    .pin-point__card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      display: block;
+  }
+
+  @media (max-width: 768px) {
+    .pin-point {
+        z-index: 999;
     }
-  
-    .pin-point__content {
-      padding: 12px 16px 16px;
+    .pin-point.active {
+        z-index: 9999;
     }
-  
     .pin-point__content h4 {
-      margin: 0 0 0px;
-      color: #FFF;
-      font-family: "RF Dewi";
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 20px; /* 142.857% */
+      font-size: 12px;
     }
-  
-    .pin-point__content p {
-      margin: 0 0 6px;
-      color: rgba(255, 255, 255, 0.80);
-      font-family: "RF Dewi";
-      font-size: 10px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 125%; /* 12.5px */
+    .pin-point__card {
+      left: 50%;
+      top: calc(100% + 10px);
+      transform: translate(-50%, 0);
+      z-index: 999;
     }
-  
-    .pin-point__link {
-      color: #FFF;
-      font-family: "RF Dewi";
-      font-size: 10px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 125%; /* 12.5px */
-      text-decoration-line: underline;
-      text-decoration-style: solid;
-      text-decoration-skip-ink: auto;
-      text-decoration-thickness: 5%; /* 0.5px */
-      text-underline-offset: 25%; /* 2.5px */
-      text-underline-position: from-font;
+    .pin-point__card img {
+    display: none;
     }
-  
-    .pin-point:hover .pin-point__card,
-    .pin-point:focus .pin-point__card,
-    .pin-point:focus-visible .pin-point__card {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(10px, -50%);
+    
+    .pin-point__card.f5 {
+        transform: translate(-84%, 0);
+    }
+    .pin-point__card.f4 {
+        transform: translate(-84%, 0);
     }
 
-    .pin-point:focus-visible {
-      outline: 2px solid rgba(255, 255, 255, 0.6);
-      outline-offset: 4px;
+    .pin-point:hover .pin-point__card,
+    .pin-point:focus .pin-point__card,
+    .pin-point:focus-visible .pin-point__card,
+    .pin-point.active .pin-point__card {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+      z-index: 9999;
     }
-  
-    @keyframes pin-pulse {
-      0% {
-        transform: scale(0.6);
-        opacity: 0.9;
-      }
-      100% {
-        transform: scale(1.8);
-        opacity: 0;
+    
+    .pin-point__card.f5.active,
+    .pin-point.active .pin-point__card.f5 {
+      transform: translate(-84%, 0) !important;
+      z-index: 9999 !important;
+    }
+    .pin-point__card.f4.active,
+    .pin-point.active .pin-point__card.f4 {
+      transform: translate(-84%, 0) !important;
+      z-index: 9999 !important;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  // Проверяем, находимся ли мы на мобильном устройстве
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  // Функция для открытия popup или перехода по ссылке
+  function openPopup(pinPoint) {
+    const popupId = pinPoint.dataset.popup;
+    const href = pinPoint.dataset.href;
+    
+    // Если указан popup, открываем его
+    if (popupId && typeof openTildaPopup === 'function') {
+      openTildaPopup(popupId);
+    }
+    // Если указана ссылка, переходим по ней
+    else if (href) {
+      window.location.href = href;
+    }
+  }
+
+  // Обработчик клика на карточку
+  function handleCardClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const card = e.currentTarget;
+    const pinPoint = card.closest('.pin-point');
+    
+    if (pinPoint) {
+      openPopup(pinPoint);
+      
+      // На мобильных закрываем карточку после клика
+      if (isMobile()) {
+        pinPoint.classList.remove('active');
       }
     }
-  
-    @media (max-width: 768px) {
-      .pin-point__card {
-        left: 50%;
-        top: calc(100% + 10px);
-        transform: translate(-50%, 0);
-      }
-  
-      .pin-point:hover .pin-point__card,
-      .pin-point:focus .pin-point__card,
-      .pin-point:focus-visible .pin-point__card {
-        transform: translate(-50%, 0);
+  }
+
+  // Обработчик клика на точку (для мобильных)
+  function handlePointClick(e) {
+    if (!isMobile()) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const pinPoint = e.currentTarget;
+    const card = pinPoint.querySelector('.pin-point__card');
+    
+    // Если клик на саму точку (не на карточку), показываем/скрываем карточку
+    if (!e.target.closest('.pin-point__card')) {
+      if (pinPoint.classList.contains('active')) {
+        pinPoint.classList.remove('active');
+      } else {
+        // Закрываем все остальные карточки
+        document.querySelectorAll('.pin-point.active').forEach(point => {
+          if (point !== pinPoint) {
+            point.classList.remove('active');
+          }
+        });
+        pinPoint.classList.add('active');
       }
     }
-  </style>
+  }
+
+  // Закрытие карточек при клике вне их области (только на мобильных)
+  function handleDocumentClick(e) {
+    if (!isMobile()) return;
+    
+    const pinPoint = e.target.closest('.pin-point');
+    if (!pinPoint) {
+      document.querySelectorAll('.pin-point.active').forEach(point => {
+        point.classList.remove('active');
+      });
+    }
+  }
+
+  // Инициализация после загрузки DOM
+  function init() {
+    const pinPoints = document.querySelectorAll('.pin-point');
+    
+    pinPoints.forEach(pinPoint => {
+      const card = pinPoint.querySelector('.pin-point__card');
+      
+      // Обработчик клика на карточку (для открытия popup)
+      if (card) {
+        card.addEventListener('click', handleCardClick);
+      }
+      
+      // Обработчик клика на точку (для мобильных - показать/скрыть карточку)
+      pinPoint.addEventListener('click', handlePointClick);
+    });
+
+    // Закрытие карточек при клике вне их области (только на мобильных)
+    document.addEventListener('click', handleDocumentClick);
+  }
+
+  // Запускаем инициализацию
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
