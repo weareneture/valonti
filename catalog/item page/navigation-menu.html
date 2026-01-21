@@ -2,8 +2,8 @@
   <div class="navigation-menu__container">
     <!-- Левая часть меню -->
     <div class="navigation-menu__left">
-      <a href="https://valonti.ru/about" class="navigation-menu__link">О компании</a>
-      <a href="https://valonti.ru/materials" class="navigation-menu__link">О компании</a>
+      <a href="https://valonti.ru/about" class="navigation-menu__link">Главная</a>
+      <!--- <a href="https://valonti.ru/materials" class="navigation-menu__link"></a> -->
       <a href="https://valonti.ru/designers" class="navigation-menu__link">Дизайнерам</a>
       <a href="https://valonti.ru/catalog" class="navigation-menu__link">Каталог</a>
     </div>
@@ -28,23 +28,61 @@
       <a href="tel:+74951207535" class="navigation-menu__phone">
         <span class="navigation-menu__phone-dot">•</span> 8 (495) 120-75-35
       </a>
-      <div class="navigation-menu__social">
+      <!--<div class="navigation-menu__social">
         <a href="#" class="navigation-menu__social-link" aria-label="Telegram">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
           </svg>
         </a>
-      </div>
+      </div>-->
     </div>
+    
+    <!-- Бургер-кнопка для мобильной версии -->
+    <button class="navigation-menu__burger" aria-label="Открыть меню">
+      <span></span>
+    </button>
   </div>
 </nav>
 
+<!-- Выпадающее меню для мобильной версии (вынесено за пределы nav для корректной работы backdrop-filter) -->
+<div class="navigation-menu__mobile-overlay">
+  <div class="navigation-menu__mobile-dropdown">
+    <div class="navigation-menu__mobile-content">
+      <nav class="navigation-menu__mobile-nav">
+        <a href="https://valonti.ru/about" class="navigation-menu__mobile-link">Главная</a>
+        <a href="https://valonti.ru/designers" class="navigation-menu__mobile-link">Дизайнерам</a>
+        <a href="https://valonti.ru/catalog" class="navigation-menu__mobile-link">Каталог</a>
+      </nav>
+      
+      <div class="navigation-menu__mobile-contacts">
+        <div class="navigation-menu__mobile-contact-info">
+          <a href="tel:+74951207535" class="navigation-menu__mobile-phone">
+            <span class="navigation-menu__phone-dot">•</span> 8 (495) 120-75-35
+          </a>
+          <a href="mailto:info@valonti.ru" class="navigation-menu__mobile-email">info@valonti.ru</a>
+        </div>
+        <div class="navigation-menu__mobile-social">
+          <a href="#" class="navigation-menu__mobile-social-link" aria-label="Telegram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-  #allrecords a {color: #fff !important;}
+  a.navigation-menu__mobile-link { color: #fff !important; }
+  a.navigation-menu__mobile-phone { color: #fff !important; }
+  a.navigation-menu__mobile-email { color: #fff !important; }
+  .navigation-menu a {color: #fff !important;}
   .navigation-menu {
       position: fixed;
       z-index: 1000;
-      background: #0000007d;
+      background: rgb(255 255 255 / 10%) !important;
+      -webkit-backdrop-filter: blur(20px);
       backdrop-filter: blur(20px);
       padding: 10px 20px;
       top: 12px;
@@ -55,6 +93,7 @@
       left: 50%;
       transform: translateX(-50%);
       transition: transform 0.3s ease, opacity 0.3s ease;
+      will-change: transform, opacity;
   }
 
   .navigation-menu--hidden {
@@ -224,99 +263,410 @@
     }
   }
   
+  /* Бургер-кнопка */
+  .navigation-menu__burger {
+    display: none;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .navigation-menu__burger span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 2px;
+    margin-left: -12px;
+    margin-top: -1.5px;
+    background-color: #FFFFFF;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .navigation-menu__burger span:before,
+  .navigation-menu__burger span:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background-color: #FFFFFF;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .navigation-menu__burger span:before {
+    top: -8px;
+  }
+  
+  .navigation-menu__burger span:after {
+    bottom: -8px;
+  }
+  
+  /* Анимация бургера в крестик */
+  .navigation-menu__burger--active span {
+    background-color: transparent !important;
+  }
+  
+  .navigation-menu__burger--active span:before {
+    top: 0;
+    transform: rotate(45deg);
+    background-color: #FFFFFF;
+  }
+  
+  .navigation-menu__burger--active span:after {
+    bottom: 0;
+    transform: rotate(-45deg);
+    background-color: #FFFFFF;
+  }
+  
+  .navigation-menu__burger:hover span,
+  .navigation-menu__burger:hover span:before,
+  .navigation-menu__burger:hover span:after {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  
+  /* Оверлей для мобильного меню (вынесен за nav для корректной работы backdrop-filter) */
+  .navigation-menu__mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .navigation-menu__mobile-overlay--active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Контейнер мобильного меню с blur */
+  .navigation-menu__mobile-dropdown {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    isolation: isolate;
+  }
+  
+  .navigation-menu__mobile-content {
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 80px 20px 40px;
+    max-width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .navigation-menu__mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  
+  .navigation-menu__mobile-link {
+    color: #FFFFFF;
+    font-family: "RF Dewi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .navigation-menu__mobile-link:hover {
+    opacity: 0.7;
+  }
+  
+  .navigation-menu__mobile-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .navigation-menu__mobile-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .navigation-menu__mobile-phone {
+    color: #FFFFFF;
+    font-family: "RF Dewi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.3s ease;
+  }
+  
+  .navigation-menu__mobile-phone:hover {
+    opacity: 0.7;
+  }
+  
+  .navigation-menu__mobile-email {
+    color: #FFFFFF;
+    font-family: "RF Dewi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.3s ease;
+  }
+  
+  .navigation-menu__mobile-email:hover {
+    opacity: 0.7;
+  }
+  
+  .navigation-menu__mobile-social {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .navigation-menu__mobile-social-link {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: transparent;
+  }
+  
+  .navigation-menu__mobile-social-link:hover {
+    border-color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+  
+  .navigation-menu__mobile-social-link svg {
+    width: 20px;
+    height: 20px;
+  }
+  
   @media (max-width: 768px) {
     .navigation-menu {
-      padding: 12px 16px;
+      padding: 8px 12px;
+      width: 272px;
+      -webkit-backdrop-filter: blur(20px) !important;
+      backdrop-filter: blur(20px) !important;
+    }
+    
+    .navigation-menu__mobile-overlay {
+      height: 100vh !important;
+      min-height: 70vh !important;
+    }
+    
+    .navigation-menu__mobile-dropdown {
+      height: 100% !important;
+      min-height: 70vh !important;
+    }
+    
+    .navigation-menu__mobile-content {
+      min-height: 70vh !important;
+      padding-top: 100px !important;
+      padding-bottom: 80px !important;
     }
   
     .navigation-menu__container {
-      flex-wrap: wrap;
-      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0;
     }
   
+    /* Скрываем обычные элементы меню на мобильной версии */
     .navigation-menu__left {
-      order: 1;
-      width: 100%;
-      justify-content: space-between;
-      gap: 12px;
+      display: none;
+    }
+    
+    .navigation-menu__mobile-nav {
+        gap: 16px;
     }
   
     .navigation-menu__center {
-      order: 0;
       flex: 0 0 auto;
+      order: 0;
+      margin-top: 4px;
     }
   
     .navigation-menu__right {
-      order: 2;
-      width: 100%;
-      justify-content: space-between;
-      gap: 12px;
+      display: none;
     }
-  
-    .navigation-menu__link {
-      font-size: 11px;
+    
+    /* Показываем бургер */
+    .navigation-menu__burger {
+      display: flex;
+      order: 1;
     }
   
     .navigation-menu__logo svg {
       width: 100px;
       height: 15px;
     }
-  
-    .navigation-menu__phone {
-      font-size: 11px;
+    
+    /* Отключаем скрытие меню при скролле на мобильной версии, когда меню открыто */
+    .navigation-menu--mobile-open {
+      transform: translateX(-50%);
     }
-  
-    .navigation-menu__social-link {
-      width: 36px;
-      height: 36px;
-    }
-  
-    .navigation-menu__social-link svg {
-      width: 16px;
-      height: 16px;
+    
+    .navigation-menu--mobile-open.navigation-menu--hidden {
+      transform: translateX(-50%);
+      opacity: 1;
     }
   }
   </style>
 
-  <script>
+<script>
   (function() {
-    let lastScrollTop = 0;
-    let scrollThreshold = 10;
-    let ticking = false;
-    const nav = document.querySelector('.navigation-menu');
-
-    if (!nav) return;
-
-    function handleScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      if (scrollTop < scrollThreshold) {
-        nav.classList.remove('navigation-menu--hidden');
-        lastScrollTop = scrollTop;
-        ticking = false;
-        return;
-      }
-
-      if (Math.abs(lastScrollTop - scrollTop) < scrollThreshold) {
-        ticking = false;
-        return;
-      }
-
-      if (scrollTop > lastScrollTop) {
-        nav.classList.add('navigation-menu--hidden');
+  let lastScrollTop = 0;
+  let scrollThreshold = 10;
+  let ticking = false;
+  const nav = document.querySelector('.navigation-menu');
+  const burger = document.querySelector('.navigation-menu__burger');
+  const overlay = document.querySelector('.navigation-menu__mobile-overlay');
+  const dropdown = document.querySelector('.navigation-menu__mobile-dropdown');
+  let isMobileMenuOpen = false;
+  
+  if (!nav) return;
+  
+  // Функция для открытия/закрытия мобильного меню
+  function toggleMobileMenu() {
+    isMobileMenuOpen = !isMobileMenuOpen;
+    
+    if (burger) {
+      if (isMobileMenuOpen) {
+        burger.classList.add('navigation-menu__burger--active');
+        nav.classList.add('navigation-menu--mobile-open');
       } else {
-        nav.classList.remove('navigation-menu--hidden');
+        burger.classList.remove('navigation-menu__burger--active');
+        nav.classList.remove('navigation-menu--mobile-open');
       }
-
+    }
+    
+    if (overlay) {
+      if (isMobileMenuOpen) {
+        overlay.classList.add('navigation-menu__mobile-overlay--active');
+        document.body.style.overflow = 'hidden';
+      } else {
+        overlay.classList.remove('navigation-menu__mobile-overlay--active');
+        document.body.style.overflow = '';
+      }
+    }
+  }
+  
+  // Обработчик клика на бургер
+  if (burger) {
+    burger.addEventListener('click', toggleMobileMenu);
+  }
+  
+  // Закрытие меню при клике на ссылку
+  const mobileLinks = document.querySelectorAll('.navigation-menu__mobile-link');
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      if (isMobileMenuOpen) {
+        toggleMobileMenu();
+      }
+    });
+  });
+  
+  // Закрытие меню при клике вне его области
+  if (overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay || e.target.classList.contains('navigation-menu__mobile-dropdown')) {
+        if (isMobileMenuOpen) {
+          toggleMobileMenu();
+        }
+      }
+    });
+  }
+  
+  function handleScroll() {
+    // Не скрываем меню, если мобильное меню открыто
+    if (isMobileMenuOpen) {
+      return;
+    }
+    
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  
+    if (scrollTop < scrollThreshold) {
+      nav.classList.remove('navigation-menu--hidden');
       lastScrollTop = scrollTop;
       ticking = false;
+      return;
     }
-
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        window.requestAnimationFrame(handleScroll);
-        ticking = true;
-      }
-    }, { passive: true });
+  
+    if (Math.abs(lastScrollTop - scrollTop) < scrollThreshold) {
+      ticking = false;
+      return;
+    }
+  
+    if (scrollTop > lastScrollTop) {
+      nav.classList.add('navigation-menu--hidden');
+    } else {
+      nav.classList.remove('navigation-menu--hidden');
+    }
+  
+    lastScrollTop = scrollTop;
+    ticking = false;
+  }
+  
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(handleScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+  
+  // Закрытие мобильного меню при изменении размера окна (переход на десктоп)
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768 && isMobileMenuOpen) {
+      toggleMobileMenu();
+    }
+  });
   })();
   </script>
