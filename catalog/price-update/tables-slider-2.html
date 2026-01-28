@@ -20,102 +20,94 @@
         </button>
       </div>
     </div>
-  </section>
+</section>
 
 <script>
     // Функция инициализации слайдера
     async function initRecommendationsSlider() {
       const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
       
-      // Базовые данные рекомендаций (все модели из tables-info.html)
+      // Базовые данные рекомендаций (все модели из tables-info-2.html)
       const recommendationsBase = [
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisum-oval.png',
-          category: 'Стол',
-          title: 'Agisum Oval',
-          productId: 'agisum-oval',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/belahis.png',
+          category: 'Журнальный стол',
+          title: 'Belahis',
+          productId: 'belahis',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/agisum-oval'
+          link: 'https://valonti.ru/catalog/mini-tables/belahis'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisum.png',
-          category: 'Стол',
-          title: 'Agisum',
-          productId: 'agisum',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/axilur-maxi.png',
+          category: 'Журнальный стол',
+          title: 'Axilur Maxi',
+          productId: 'axilur-maxi',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/agisum'
+          link: 'https://valonti.ru/catalog/mini-tables/axilur-maxi'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisu.png',
-          category: 'Стол',
-          title: 'Agisu',
-          productId: 'agisu',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/axilur-mini.png',
+          category: 'Журнальный стол',
+          title: 'Axilur Mini',
+          productId: 'axilur-mini',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/agisu'
+          link: 'https://valonti.ru/catalog/mini-tables/axilur-mini'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png',
-          category: 'Стол',
-          title: 'Areolum',
-          productId: 'areolum',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/alurax.png',
+          category: 'Журнальный стол',
+          title: 'Alurax',
+          productId: 'alurax',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/areolum'
+          link: 'https://valonti.ru/catalog/mini-tables/alurax'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/trubios.png',
-          category: 'Стол',
-          title: 'Trubios',
-          productId: 'trubios',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/jadorex.png',
+          category: 'Журнальный стол',
+          title: 'Jadorex',
+          productId: 'jadorex',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/trubios'
+          link: 'https://valonti.ru/catalog/mini-tables/jadorex'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisumus.png',
-          category: 'Стол',
-          title: 'Agisumus',
-          productId: 'agisumus',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/velarion.png',
+          category: 'Журнальный стол',
+          title: 'Velarion',
+          productId: 'velarion',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/agisumus'
+          link: 'https://valonti.ru/catalog/mini-tables/velarion'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/cryssora.png',
-          category: 'Стол',
-          title: 'Cryssora',
-          productId: 'cryssora',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/estrellum.png',
+          category: 'Журнальный стол',
+          title: 'Estrellum',
+          productId: 'estrellum',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/cryssora'
+          link: 'https://valonti.ru/catalog/mini-tables/estrellum'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/trubios-s.png',
-          category: 'Стол',
-          title: 'Trubios S',
-          productId: 'trubios-s',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/firmissum.png',
+          category: 'Журнальный стол',
+          title: 'Firmissum',
+          productId: 'firmissum',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/trubios-s'
+          link: 'https://valonti.ru/catalog/mini-tables/firmissum'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/elysius.png',
-          category: 'Стол',
-          title: 'Elysius',
-          productId: 'elysius',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/akilum.png',
+          category: 'Журнальный стол',
+          title: 'Akilum',
+          productId: 'akilum',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/Elysius'
+          link: 'https://valonti.ru/catalog/mini-tables/akilum'
         },
         {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisur.png',
-          category: 'Стол',
-          title: 'Agisur',
-          productId: 'agisur',
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/krabos.png',
+          category: 'Журнальный стол',
+          title: 'Krabos',
+          productId: 'krabos',
           price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/agisur'
-        },
-        {
-          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/fermitto.png',
-          category: 'Стол',
-          title: 'Fermitto',
-          productId: 'fermitto',
-          price: 'Загрузка...',
-          link: 'https://valonti.ru/catalog/tables/fermitto'
+          link: 'https://valonti.ru/catalog/mini-tables/krabos'
         },
       ];
       
