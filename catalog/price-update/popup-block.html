@@ -1,0 +1,43 @@
+<div class='fixed-block-buy' onclick="openTildaPopup('buyitempopup')" data-product-id="belahis">
+    <div class='text'>
+        <p class='item-name-buy'>Журнальный стол Belahis</p>
+        <p class='item-price-buy'>Загрузка...</p>
+    </div>
+    <button class='item-button-buy'>Заказать</button>
+</div>
+
+<script>
+(function() {
+  const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
+  
+  async function updatePrice() {
+    try {
+      const block = document.querySelector('.fixed-block-buy[data-product-id]');
+      if (!block) {
+        setTimeout(updatePrice, 100);
+        return;
+      }
+      
+      const productId = block.getAttribute('data-product-id');
+      const priceElement = block.querySelector('.item-price-buy');
+      
+      if (!priceElement) return;
+      
+      const response = await fetch(PRICES_URL + '?t=' + Date.now());
+      const data = await response.json();
+      
+      if (data.prices && data.prices[productId]) {
+        priceElement.textContent = data.prices[productId];
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки цен:', error);
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updatePrice);
+  } else {
+    updatePrice();
+  }
+})();
+</script>
