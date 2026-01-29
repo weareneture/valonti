@@ -1,0 +1,312 @@
+<!-- Блокировка тулбара изображений -->
+<meta http-equiv="imagetoolbar" content="no" />
+
+<script>
+// Защита изображений от сохранения для Tilda
+(function() {
+  'use strict';
+  
+  // Добавляем мета-тег для блокировки тулбара изображений (если его еще нет)
+  if (!document.querySelector('meta[http-equiv="imagetoolbar"]')) {
+    const metaTag = document.createElement('meta');
+    metaTag.setAttribute('http-equiv', 'imagetoolbar');
+    metaTag.setAttribute('content', 'no');
+    document.head.insertBefore(metaTag, document.head.firstChild);
+  }
+  
+  const protectedImages = new WeakSet();
+  
+  // Блокируем контекстное меню на изображениях
+  document.addEventListener('contextmenu', function(e) {
+    const target = e.target;
+    if (target.tagName === 'IMG' || target.closest('img') || target.closest('.img-protected-wrapper')) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return false;
+    }
+  }, true);
+
+  // Блокируем перетаскивание изображений
+  document.addEventListener('dragstart', function(e) {
+    const target = e.target;
+    if (target.tagName === 'IMG' || target.closest('img') || target.closest('.img-protected-wrapper')) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return false;
+    }
+  }, true);
+
+  // Блокируем выделение изображений
+  document.addEventListener('selectstart', function(e) {
+    const target = e.target;
+    if (target.tagName === 'IMG' || target.closest('img') || target.closest('.img-protected-wrapper')) {
+      e.preventDefault();
+      return false;
+    }
+  }, true);
+
+  // Блокируем копирование
+  document.addEventListener('copy', function(e) {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const container = range.commonAncestorContainer;
+      const img = container.nodeType === 1 ? container : container.parentElement;
+      if (img && (img.tagName === 'IMG' || img.querySelector('img'))) {
+        e.preventDefault();
+        return false;
+      }
+    }
+  }, true);
+
+  // Блокируем горячие клавиши
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
+      e.preventDefault();
+      return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['I', 'J', 'C', 'i', 'j', 'c'].includes(e.key)) {
+      e.preventDefault();
+      return false;
+    }
+    if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && e.key === 'u')) {
+      e.preventDefault();
+      return false;
+    }
+  }, false);
+
+  // Добавляем невидимый overlay поверх изображения
+  function addOverlay(img) {
+    if (protectedImages.has(img)) return;
+    protectedImages.add(img);
+    
+    // Пропускаем очень маленькие изображения (иконки, логотипы)
+    if (img.naturalWidth && img.naturalWidth < 50 && img.naturalHeight && img.naturalHeight < 50) return;
+    
+    // Пытаемся использовать существующий родитель
+    let container = img.parentElement;
+    const parentStyle = window.getComputedStyle(container);
+    const hasPosition = parentStyle.position === 'relative' || parentStyle.position === 'absolute' || parentStyle.position === 'fixed';
+    
+    // Если родитель не имеет position, пытаемся добавить его (если это безопасно)
+    if (!hasPosition) {
+      // Проверяем, можно ли безопасно добавить position: relative
+      const parentTag = container.tagName.toLowerCase();
+      const safeTags = ['div', 'section', 'article', 'figure', 'picture', 'a', 'span'];
+      
+      if (safeTags.includes(parentTag) && !container.classList.contains('img-protected-wrapper')) {
+        // Добавляем position: relative к родителю
+        const originalPosition = container.style.position;
+        container.style.position = 'relative';
+        container.classList.add('img-protected-container');
+      } else {
+        // Если нельзя изменить родителя, создаем минимальный wrapper
+        if (!container.classList.contains('img-protected-wrapper')) {
+          // Сохраняем текущий display изображения
+          const imgDisplay = window.getComputedStyle(img).display;
+          
+          // Создаем минимальный wrapper
+          const wrapper = document.createElement(imgDisplay === 'inline' || imgDisplay === 'inline-block' ? 'span' : 'div');
+          wrapper.className = 'img-protected-wrapper';
+          
+          // Wrapper наследует размеры изображения автоматически
+          wrapper.style.cssText = `
+            position: relative !important;
+            display: ${imgDisplay === 'inline' ? 'inline-block' : 'block'} !important;
+            line-height: 0 !important;
+          `;
+          
+          // Вставляем wrapper
+          img.parentNode.insertBefore(wrapper, img);
+          wrapper.appendChild(img);
+          container = wrapper;
+        }
+      }
+    }
+    
+    // Проверяем, есть ли уже overlay
+    if (container.querySelector('.img-protected-overlay')) return;
+    
+    // Добавляем обработчики на контейнер для блокировки сохранения
+    // но разрешаем обычные клики
+    const blockContextMenu = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return false;
+    };
+    
+    const blockRightClick = function(e) {
+      if (e.button === 2) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      }
+    };
+    
+    const blockDrag = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return false;
+    };
+    
+    container.addEventListener('contextmenu', blockContextMenu, {capture: true, passive: false});
+    container.addEventListener('mousedown', blockRightClick, {capture: true, passive: false});
+    container.addEventListener('dragstart', blockDrag, {capture: true, passive: false});
+    container.addEventListener('selectstart', blockContextMenu, {capture: true, passive: false});
+    
+    // Создаем overlay только для визуальной защиты (не блокирует клики)
+    const overlay = document.createElement('span');
+    overlay.className = 'img-protected-overlay';
+    overlay.setAttribute('data-protected-overlay', 'true');
+    overlay.style.cssText = `
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 999999 !important;
+      cursor: pointer !important;
+      background: transparent !important;
+      pointer-events: none !important;
+    `;
+    
+    container.appendChild(overlay);
+  }
+
+  // Применяем защиту ко всем изображениям
+  function protectAllImages() {
+    const images = document.querySelectorAll('img:not([data-protected])');
+    images.forEach(function(img) {
+      // Пропускаем изображения без src
+      if (!img.src && !img.dataset.src) return;
+      
+      img.dataset.protected = 'true';
+      
+      // Блокируем тулбар изображений через атрибут (для IE и старых браузеров)
+      img.setAttribute('galleryimg', 'no');
+      img.setAttribute('oncontextmenu', 'return false;');
+      img.setAttribute('ondragstart', 'return false;');
+      img.setAttribute('onselectstart', 'return false;');
+      
+      // Если изображение уже загружено
+      if (img.complete && img.naturalWidth > 0) {
+        addOverlay(img);
+      } else {
+        // Ждем загрузки изображения
+        img.addEventListener('load', function() {
+          addOverlay(img);
+        }, {once: true});
+        
+        // Также пробуем добавить сразу (на случай если уже загружено)
+        setTimeout(function() {
+          if (!protectedImages.has(img)) {
+            addOverlay(img);
+          }
+        }, 100);
+      }
+    });
+  }
+
+  // Добавляем CSS стили
+  const styleId = 'img-protection-styles-tilda';
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      img {
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        pointer-events: auto !important;
+        -webkit-user-drag: none !important;
+        -khtml-user-drag: none !important;
+        -moz-user-drag: none !important;
+        -o-user-drag: none !important;
+        user-drag: none !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-modify: read-only !important;
+        -ms-interpolation-mode: nearest-neighbor !important;
+        -ms-touch-action: manipulation !important;
+      }
+      img[galleryimg="no"] {
+        -ms-interpolation-mode: nearest-neighbor !important;
+      }
+      .img-protected-wrapper {
+        position: relative !important;
+        display: inline-block !important;
+        line-height: 0 !important;
+        vertical-align: baseline !important;
+      }
+      .img-protected-wrapper img {
+        max-width: 100% !important;
+        height: auto !important;
+        width: auto !important;
+        display: block !important;
+        vertical-align: baseline !important;
+      }
+      .img-protected-overlay {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 999999 !important;
+        cursor: pointer !important;
+        background: transparent !important;
+        pointer-events: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // Применяем защиту при загрузке
+  function init() {
+    // Первичная защита
+    protectAllImages();
+    
+    // Повторная проверка через небольшую задержку
+    setTimeout(protectAllImages, 500);
+    setTimeout(protectAllImages, 1500);
+    
+    // Защищаем новые изображения
+    const observer = new MutationObserver(function(mutations) {
+      let shouldCheck = false;
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+              if (node.tagName === 'IMG' || node.querySelector('img')) {
+                shouldCheck = true;
+              }
+            }
+          });
+        }
+      });
+      if (shouldCheck) {
+        setTimeout(protectAllImages, 100);
+      }
+    });
+    
+    if (document.body) {
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
+  }
+
+  // Запускаем защиту
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    setTimeout(init, 100);
+  }
+
+})();
+</script>

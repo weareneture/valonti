@@ -1,0 +1,440 @@
+<!-- ========== БЛОК ТАБОВ ========== -->
+<div class="category__tabs">
+    <button class="category__tab active" data-target-id="#rec1796336341" data-route="tables" data-h1="Столы" data-title="Столы - Valonti" data-description="Коллекция элитных столов от Valonti. Дизайнерские столы из натуральных материалов для вашего интерьера." type="button">Столы</button>
+    <button class="category__tab" data-target-id="#rec1796393461" data-route="mini-tables" data-h1="Журнальные столы" data-title="Журнальные столы - Valonti" data-description="Эксклюзивные журнальные столы от Valonti. Современный дизайн и премиальное качество." type="button">Журнальные&nbsp;столы</button>
+    <button class="category__tab" data-target-id="#rec1796394001" data-route="mirrors" data-h1="Зеркала" data-title="Зеркала - Valonti" data-description="Дизайнерские зеркала от Valonti. Уникальные формы и премиальные материалы." type="button">Зеркала</button>
+    <button class="category__tab" data-target-id="#rec1788574894" data-route="shelves" data-h1="Стеллажи" data-title="Стеллажи - Valonti" data-description="Элитные стеллажи от Valonti. Функциональность и эстетика в одном решении." type="button">Стеллажи</button>
+    <button class="category__tab" data-target-id="#rec1788574895" data-route="partitions" data-h1="Перегородки" data-title="Перегородки - Valonti" data-description="Дизайнерские перегородки от Valonti. Зонирование пространства с элегантностью." type="button">Перегородки</button>
+    <button class="category__tab" data-target-id="#rec1788574896" data-route="consoles" data-h1="Консоли" data-title="Консоли - Valonti" data-description="Эксклюзивные консоли от Valonti. Изысканные решения для прихожей и гостиной." type="button">Консоли</button>
+    <button class="category__tab" data-target-id="#rec1788574897" data-route="banquettes" data-h1="Банкетки" data-title="Банкетки - Valonti" data-description="Премиальные банкетки от Valonti. Комфорт и стиль для вашего дома." type="button">Банкетки</button>
+  </div>
+
+
+  <script>
+    // Адаптированный скрипт переключения табов на основе VORON
+    (function() {
+      'use strict';
+
+      // Функция для получения текущего маршрута из URL
+      function getCurrentRoute() {
+        const path = window.location.pathname;
+        // Извлекаем последний сегмент пути (например, "tables" из "/catalog/tables/")
+        const segments = path.split('/').filter(function(seg) { return seg.length > 0; });
+        return segments.length > 0 ? segments[segments.length - 1] : null;
+      }
+
+      // Функция для обновления URL при переключении таба
+      function updateURL(route) {
+        if (!route) return;
+        
+        const basePath = '/catalog/';
+        const newPath = basePath + route + '/';
+        
+        // Обновляем URL без перезагрузки страницы
+        if (window.history && window.history.pushState) {
+          window.history.pushState({ route: route }, '', newPath);
+        }
+      }
+
+      // Функция для поиска таба по маршруту
+      function findTabByRoute(route) {
+        if (!route) return null;
+        
+        const tabs = document.querySelectorAll('.category__tab');
+        for (let i = 0; i < tabs.length; i++) {
+          const tabRoute = tabs[i].getAttribute('data-route');
+          if (tabRoute === route) {
+            return tabs[i];
+          }
+        }
+        return null;
+      }
+
+      // Функция для обновления метаданных страницы
+      function updateMetaData(tab) {
+        if (!tab) return;
+        
+        const h1Text = tab.getAttribute('data-h1');
+        const titleText = tab.getAttribute('data-title');
+        const descriptionText = tab.getAttribute('data-description');
+        
+        // Обновляем title
+        if (titleText) {
+          document.title = titleText;
+        }
+        
+        // Обновляем или создаем meta description
+        let metaDescription = document.querySelector('meta[name="description"]');
+        if (!metaDescription) {
+          metaDescription = document.createElement('meta');
+          metaDescription.setAttribute('name', 'description');
+          document.head.appendChild(metaDescription);
+        }
+        if (descriptionText) {
+          metaDescription.setAttribute('content', descriptionText);
+        }
+        
+        // Обновляем или создаем h1
+        let h1Element = document.querySelector('h1');
+        if (!h1Element) {
+          // Ищем контейнер для h1 (например, в блоке с табами или создаем новый)
+          const tabsContainer = document.querySelector('.category__tabs');
+          if (tabsContainer && tabsContainer.parentNode) {
+            h1Element = document.createElement('h1');
+            h1Element.style.cssText = 'margin: 0; padding: 0;';
+            tabsContainer.parentNode.insertBefore(h1Element, tabsContainer);
+          } else {
+            // Если не нашли подходящее место, создаем в body
+            h1Element = document.createElement('h1');
+            h1Element.style.cssText = 'margin: 0; padding: 0;';
+            document.body.insertBefore(h1Element, document.body.firstChild);
+          }
+        }
+        if (h1Text && h1Element) {
+          h1Element.textContent = h1Text;
+        }
+      }
+
+      // Функция для активации таба по маршруту из URL
+      function activateTabByRoute(updateUrl) {
+        const currentRoute = getCurrentRoute();
+        if (!currentRoute) return false;
+        
+        const tab = findTabByRoute(currentRoute);
+        if (tab) {
+          const { blocks1: currentBlocks } = collectTabsAndBlocks();
+          show1(tab, currentBlocks, updateUrl !== false);
+          return true;
+        }
+        return false;
+      }
+
+      // Обработчик для кнопок "Назад"/"Вперед" браузера
+      window.addEventListener('popstate', function(event) {
+        setTimeout(function() {
+          activateTabByRoute(false);
+        }, 50);
+      });
+
+      // Функция для сбора табов и блоков
+      function collectTabsAndBlocks() {
+        let blocks1 = [];
+        let buttons1 = document.querySelectorAll('.category__tab');
+        
+        // Собираем ID из data-target-id всех табов
+        buttons1.forEach(function(button) {
+          const targetId = button.getAttribute('data-target-id');
+          if (targetId) {
+            blocks1.push(targetId);
+          }
+        });
+        
+        return { blocks1: blocks1, buttons1: buttons1 };
+      }
+
+      function show1(e, blocks1, updateUrl) {
+        // Останавливаем анимации в неактивных zero-блоках
+        blocks1.forEach(function(blockId) {
+          const zeroBlock = document.querySelector(blockId);
+          if (zeroBlock) {
+            zeroBlock.querySelectorAll('.t-animate_started').forEach(function(el) {
+              el.classList.remove('t-animate_started');
+            });
+          }
+        });
+
+        // Скрываем zero-блоки Tilda (контейнеры с ID)
+        blocks1.forEach(function(blockId) {
+          const zeroBlock = document.querySelector(blockId);
+          if (zeroBlock) {
+            // Скрываем весь zero-блок
+            zeroBlock.classList.add('v-inactive');
+            zeroBlock.classList.remove('v-activetab');
+            zeroBlock.style.display = 'none';
+          }
+        });
+
+        // Убираем активный класс со всех табов
+        document.querySelectorAll('.category__tab.active').forEach(function(element) {
+          element.classList.remove('active');
+        });
+
+        // Добавляем активный класс к выбранному табу
+        e.classList.add('active');
+
+        // Обновляем метаданные страницы
+        updateMetaData(e);
+
+        // Обновляем URL, если это не инициализация
+        if (updateUrl !== false) {
+          const route = e.getAttribute('data-route');
+          if (route) {
+            updateURL(route);
+          }
+        }
+
+        // Показываем выбранный zero-блок по ID
+        const targetId = e.getAttribute('data-target-id');
+        if (targetId) {
+          const zeroBlock = document.querySelector(targetId);
+          
+          if (zeroBlock) {
+            // Показываем zero-блок
+            zeroBlock.classList.remove('v-inactive');
+            zeroBlock.classList.add('v-activetab');
+            zeroBlock.style.display = 'block'; // Zero-блок показываем как block
+            
+            // Внутренний контент с классом model__cat должен быть grid
+            const innerContent = zeroBlock.querySelector('.model__cat');
+            if (innerContent) {
+              innerContent.style.display = 'grid';
+            }
+            
+            // Обновляем lazy load для Tilda
+            if (typeof t_lazyload_update !== "undefined") {
+              t_lazyload_update();
+            }
+            
+            // Обновляем слайдеры Tilda
+            if (typeof t_slds_updateSlider === 'function') {
+              zeroBlock.querySelectorAll('.t-slds').forEach(function(slider) {
+                t_slds_updateSlider(slider);
+              });
+            }
+            
+            // Запускаем анимации Tilda
+            zeroBlock.querySelectorAll('.t-animate').forEach(function(el) {
+              el.classList.add('t-animate_started');
+            });
+          } else {
+            console.log('Zero-блок не найден:', targetId);
+          }
+        }
+      }
+
+      // Инициализация через Tilda API
+      if (typeof t_onReady === 'function') {
+        t_onReady(function() {
+          if (typeof t_onFuncLoad === 'function') {
+            t_onFuncLoad('t396_init', function initTabsTilda() {
+              // Пересобираем табы и блоки при инициализации
+              const { blocks1, buttons1 } = collectTabsAndBlocks();
+              
+              if (!blocks1.length || !buttons1.length) {
+                console.log('Табы или блоки не найдены, повторная попытка через 500мс');
+                setTimeout(initTabsTilda, 500);
+                return;
+              }
+              
+              // Скрываем только те блоки, которые связаны с табами
+              blocks1.forEach(function(blockId) {
+                const block = document.querySelector(blockId);
+                if (block) {
+                  block.classList.add('v-inactive');
+                  block.classList.remove('v-activetab');
+                  block.style.display = 'none';
+                }
+              });
+
+              // Настраиваем обработчики для всех табов (делегирование событий)
+              const tabsContainer = document.querySelector('.category__tabs');
+              if (tabsContainer) {
+                tabsContainer.addEventListener('click', function(e) {
+                  const tab = e.target.closest('.category__tab');
+                  if (tab) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Пересобираем блоки на случай изменений
+                    const { blocks1: currentBlocks } = collectTabsAndBlocks();
+                    show1(tab, currentBlocks, true);
+                  }
+                }, true);
+              } else {
+                // Fallback: обработчики на каждом табе
+                buttons1.forEach(function(element) {
+                  element.addEventListener("click", function() {
+                    const { blocks1: currentBlocks } = collectTabsAndBlocks();
+                    show1(this, currentBlocks, true);
+                  }, true);
+                });
+              }
+
+              // Проверяем URL и открываем соответствующий таб
+              const currentRoute = getCurrentRoute();
+              let tabToActivate = null;
+              
+              if (currentRoute) {
+                tabToActivate = findTabByRoute(currentRoute);
+              }
+              
+              // Если таб не найден по маршруту, проверяем hash
+              if (!tabToActivate && window.location.hash && window.location.hash.indexOf('/tab/') === -1) {
+                tabToActivate = document.querySelector('.category__tab[data-target-id="' + window.location.hash + '"]');
+              }
+              
+              // Если ничего не найдено, используем первый активный или первый таб
+              if (!tabToActivate) {
+                tabToActivate = document.querySelector('.category__tab.active') || buttons1[0];
+              }
+              
+              if (tabToActivate) {
+                // Используем setTimeout для надежности
+                setTimeout(function() {
+                  const { blocks1: currentBlocks } = collectTabsAndBlocks();
+                  // При инициализации не обновляем URL, если он уже правильный
+                  const shouldUpdateUrl = currentRoute && tabToActivate.getAttribute('data-route') !== currentRoute;
+                  show1(tabToActivate, currentBlocks, shouldUpdateUrl);
+                }, 50);
+              }
+            });
+          } else {
+            // Fallback если t_onFuncLoad недоступен
+            setTimeout(function initTabsFallback() {
+              // Пересобираем табы и блоки
+              const { blocks1, buttons1 } = collectTabsAndBlocks();
+              
+              if (!blocks1.length || !buttons1.length) {
+                console.log('Табы или блоки не найдены, повторная попытка через 500мс');
+                setTimeout(initTabsFallback, 500);
+                return;
+              }
+              
+              // Скрываем zero-блоки Tilda
+              blocks1.forEach(function(blockId) {
+                const zeroBlock = document.querySelector(blockId);
+                if (zeroBlock) {
+                  zeroBlock.classList.add('v-inactive');
+                  zeroBlock.classList.remove('v-activetab');
+                  zeroBlock.style.display = 'none';
+                }
+              });
+
+              // Настраиваем обработчики для всех табов (делегирование событий)
+              const tabsContainer = document.querySelector('.category__tabs');
+              if (tabsContainer) {
+                tabsContainer.addEventListener('click', function(e) {
+                  const tab = e.target.closest('.category__tab');
+                  if (tab) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const { blocks1: currentBlocks } = collectTabsAndBlocks();
+                    show1(tab, currentBlocks, true);
+                  }
+                }, true);
+              } else {
+                buttons1.forEach(function(element) {
+                  element.addEventListener("click", function() {
+                    const { blocks1: currentBlocks } = collectTabsAndBlocks();
+                    show1(this, currentBlocks, true);
+                  }, true);
+                });
+              }
+
+              // Проверяем URL и открываем соответствующий таб
+              const currentRoute = getCurrentRoute();
+              let tabToActivate = null;
+              
+              if (currentRoute) {
+                tabToActivate = findTabByRoute(currentRoute);
+              }
+              
+              // Если таб не найден по маршруту, проверяем hash
+              if (!tabToActivate && window.location.hash && window.location.hash.indexOf('/tab/') === -1) {
+                tabToActivate = document.querySelector('.category__tab[data-target-id="' + window.location.hash + '"]');
+              }
+              
+              // Если ничего не найдено, используем первый активный или первый таб
+              if (!tabToActivate) {
+                tabToActivate = document.querySelector('.category__tab.active') || buttons1[0];
+              }
+              
+              if (tabToActivate) {
+                setTimeout(function() {
+                  const { blocks1: currentBlocks } = collectTabsAndBlocks();
+                  const shouldUpdateUrl = currentRoute && tabToActivate.getAttribute('data-route') !== currentRoute;
+                  show1(tabToActivate, currentBlocks, shouldUpdateUrl);
+                }, 50);
+              }
+            }, 100);
+          }
+        });
+      } else {
+        // Fallback если t_onReady недоступен
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initTabs, 100);
+          });
+        } else {
+          setTimeout(initTabs, 100);
+        }
+      }
+
+      function initTabs() {
+        // Пересобираем табы и блоки
+        const { blocks1, buttons1 } = collectTabsAndBlocks();
+        
+        if (!blocks1.length || !buttons1.length) {
+          console.log('Табы или блоки не найдены, повторная попытка через 500мс');
+          setTimeout(initTabs, 500);
+          return;
+        }
+        
+        // Скрываем zero-блоки Tilda
+        blocks1.forEach(function(blockId) {
+          const zeroBlock = document.querySelector(blockId);
+          if (zeroBlock) {
+            zeroBlock.classList.add('v-inactive');
+            zeroBlock.classList.remove('v-activetab');
+            zeroBlock.style.display = 'none';
+          }
+        });
+
+        // Настраиваем обработчики для всех табов (делегирование событий)
+        const tabsContainer = document.querySelector('.category__tabs');
+        if (tabsContainer) {
+          tabsContainer.addEventListener('click', function(e) {
+            const tab = e.target.closest('.category__tab');
+            if (tab) {
+              e.preventDefault();
+              e.stopPropagation();
+              const { blocks1: currentBlocks } = collectTabsAndBlocks();
+              show1(tab, currentBlocks, true);
+            }
+          }, true);
+        } else {
+          buttons1.forEach(function(element) {
+            element.addEventListener("click", function() {
+              const { blocks1: currentBlocks } = collectTabsAndBlocks();
+              show1(this, currentBlocks, true);
+            }, true);
+          });
+        }
+
+        // Проверяем URL и открываем соответствующий таб
+        const currentRoute = getCurrentRoute();
+        let tabToActivate = null;
+        
+        if (currentRoute) {
+          tabToActivate = findTabByRoute(currentRoute);
+        }
+        
+        // Если таб не найден по маршруту, проверяем hash
+        if (!tabToActivate && window.location.hash && window.location.hash.indexOf('/tab/') === -1) {
+          tabToActivate = document.querySelector('.category__tab[data-target-id="' + window.location.hash + '"]');
+        }
+        
+        // Если ничего не найдено, используем первый активный или первый таб
+        if (!tabToActivate) {
+          tabToActivate = document.querySelector('.category__tab.active') || buttons1[0];
+        }
+        
+        if (tabToActivate) {
+          setTimeout(function() {
+            const { blocks1: currentBlocks } = collectTabsAndBlocks();
+            const shouldUpdateUrl = currentRoute && tabToActivate.getAttribute('data-route') !== currentRoute;
+            show1(tabToActivate, currentBlocks, shouldUpdateUrl);
+          }, 50);
+        }
+      }
+    })();
+  </script>
