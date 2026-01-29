@@ -1,17 +1,31 @@
 <!-- ========== БЛОК ТАБОВ ========== -->
+<style>
+  /* Убираем лишнее пространство от неактивных блоков табов (важно для /catalog/tables/ и подстраниц) */
+  .v-inactive {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+</style>
+<!-- ========== БЛОК ТАБОВ ========== -->
+<!-- Один и тот же блок вставляйте на ВСЕ страницы каталога. Активный таб скрипт выставит по URL (/catalog/, /catalog/tables/, /catalog/mini-tables/ и т.д.). Ручная смена active не нужна. -->
 <div class="category__tabs">
-    <button class="category__tab active" data-target-id="#rec1796336341" data-route="tables" data-h1="Столы" data-title="Столы - Valonti" data-description="Коллекция элитных столов от Valonti. Дизайнерские столы из натуральных материалов для вашего интерьера." type="button">Столы</button>
-    <button class="category__tab" data-target-id="#rec1796393461" data-route="mini-tables" data-h1="Журнальные столы" data-title="Журнальные столы - Valonti" data-description="Эксклюзивные журнальные столы от Valonti. Современный дизайн и премиальное качество." type="button">Журнальные&nbsp;столы</button>
-    <button class="category__tab" data-target-id="#rec1796394001" data-route="mirrors" data-h1="Зеркала" data-title="Зеркала - Valonti" data-description="Дизайнерские зеркала от Valonti. Уникальные формы и премиальные материалы." type="button">Зеркала</button>
-    <button class="category__tab" data-target-id="#rec1788574894" data-route="shelves" data-h1="Стеллажи" data-title="Стеллажи - Valonti" data-description="Элитные стеллажи от Valonti. Функциональность и эстетика в одном решении." type="button">Стеллажи</button>
-    <button class="category__tab" data-target-id="#rec1788574895" data-route="partitions" data-h1="Перегородки" data-title="Перегородки - Valonti" data-description="Дизайнерские перегородки от Valonti. Зонирование пространства с элегантностью." type="button">Перегородки</button>
-    <button class="category__tab" data-target-id="#rec1788574896" data-route="consoles" data-h1="Консоли" data-title="Консоли - Valonti" data-description="Эксклюзивные консоли от Valonti. Изысканные решения для прихожей и гостиной." type="button">Консоли</button>
-    <button class="category__tab" data-target-id="#rec1788574897" data-route="banquettes" data-h1="Банкетки" data-title="Банкетки - Valonti" data-description="Премиальные банкетки от Valonti. Комфорт и стиль для вашего дома." type="button">Банкетки</button>
-  </div>
+  <button class="category__tab active" data-target-id="#rec1796336341" data-route="tables" data-title="Премиум столы — обеденные и дизайнерские | Москва и МО | Valonti" data-description="Обеденные и дизайнерские столы премиум-класса в Москве. Агломерат, керамогранит, кварцкерамика, стекло, нержавеющая сталь. Доставка по Московской области." type="button">Столы</button>
+  <button class="category__tab" data-target-id="#rec1796393461" data-route="mini-tables" data-title="Журнальные столы премиум-класса — купить в Москве и МО | Valonti" data-description="Элитные и дизайнерские журнальные столы премиум-класса в Москве и области. Агломерат, керамогранит, кварцкерамика, стекло, нержавеющая сталь. Доставка по МО." type="button">Журнальные&nbsp;столы</button>
+  <button class="category__tab" data-target-id="#rec1796394001" data-route="mirrors" data-title="Зеркала премиум-класса для интерьера | Москва и МО | Valonti" data-description="Элитные и дизайнерские зеркала премиум-класса в Москве. Стекло, нержавеющая сталь. Для прихожей, спальни, ванной. Доставка по Московской области." type="button">Зеркала</button>
+  <button class="category__tab" data-target-id="#rec1850179241" data-route="shelves" data-title="Стеллажи и полки премиум-класса | Москва и МО | Valonti" data-description="Элитные стеллажи и книжные полки премиум-класса в Москве и области. Агломерат, стекло, нержавеющая сталь, керамогранит. Модульные системы, на заказ, доставка по МО." type="button">Стеллажи</button>
+  <button class="category__tab" data-target-id="#rec1850187221" data-route="partitions" data-title="Мебельные перегородки премиум-класса | Зонирование | Москва и МО | Valonti" data-description="Премиум перегородки для зонирования в Москве и МО. Стекло, нержавеющая сталь. Раздвижные, дизайнерские. Для квартир и домов. На заказ, доставка по области." type="button">Перегородки</button>
+  <button class="category__tab" data-target-id="#rec1850187671" data-route="consoles" data-title="Консоли премиум-класса для прихожей и гостиной | Москва и МО | Valonti" data-description="Консоли премиум-класса в Москве: для прихожей, гостиной, туалетные столики. Агломерат, керамогранит, кварцкерамика, стекло, нержавеющая сталь. Доставка по МО." type="button">Консоли</button>
+  <button class="category__tab" data-target-id="#rec1850187761" data-route="banquettes" data-title="Банкетки премиум-класса | Москва и МО | Valonti" data-description="Премиальные банкетки от Valonti. Агломерат, керамогранит, стекло, нержавеющая сталь. Комфорт и стиль. Доставка по МО." type="button">Банкетки</button>
+</div>
 
 
   <script>
-    // Адаптированный скрипт переключения табов на основе VORON
+    // Адаптированный скрипт переключения табов на основе
     (function() {
       'use strict';
 
@@ -23,14 +37,15 @@
         return segments.length > 0 ? segments[segments.length - 1] : null;
       }
 
-      // Функция для обновления URL при переключении таба
+      // Функция для обновления URL при переключении таба (сохраняем ?utm_... и #hash)
       function updateURL(route) {
         if (!route) return;
         
         const basePath = '/catalog/';
-        const newPath = basePath + route + '/';
+        let newPath = basePath + route + '/';
+        if (window.location.search) newPath += window.location.search;
+        if (window.location.hash) newPath += window.location.hash;
         
-        // Обновляем URL без перезагрузки страницы
         if (window.history && window.history.pushState) {
           window.history.pushState({ route: route }, '', newPath);
         }
@@ -143,14 +158,19 @@
           }
         });
 
-        // Скрываем zero-блоки Tilda (контейнеры с ID)
+        // Скрываем zero-блоки Tilda (контейнеры с ID) — полностью убираем из потока и пространства
         blocks1.forEach(function(blockId) {
           const zeroBlock = document.querySelector(blockId);
           if (zeroBlock) {
-            // Скрываем весь zero-блок
             zeroBlock.classList.add('v-inactive');
             zeroBlock.classList.remove('v-activetab');
-            zeroBlock.style.display = 'none';
+            zeroBlock.style.setProperty('display', 'none', 'important');
+            zeroBlock.style.setProperty('height', '0', 'important');
+            zeroBlock.style.setProperty('min-height', '0', 'important');
+            zeroBlock.style.setProperty('overflow', 'hidden', 'important');
+            zeroBlock.style.setProperty('visibility', 'hidden', 'important');
+            zeroBlock.style.setProperty('margin', '0', 'important');
+            zeroBlock.style.setProperty('padding', '0', 'important');
           }
         });
 
@@ -179,10 +199,16 @@
           const zeroBlock = document.querySelector(targetId);
           
           if (zeroBlock) {
-            // Показываем zero-блок
             zeroBlock.classList.remove('v-inactive');
             zeroBlock.classList.add('v-activetab');
-            zeroBlock.style.display = 'block'; // Zero-блок показываем как block
+            zeroBlock.style.removeProperty('display');
+            zeroBlock.style.removeProperty('height');
+            zeroBlock.style.removeProperty('min-height');
+            zeroBlock.style.removeProperty('overflow');
+            zeroBlock.style.removeProperty('visibility');
+            zeroBlock.style.removeProperty('margin');
+            zeroBlock.style.removeProperty('padding');
+            zeroBlock.style.display = 'block';
             
             // Внутренний контент с классом model__cat должен быть grid
             const innerContent = zeroBlock.querySelector('.model__cat');
@@ -210,6 +236,39 @@
             console.log('Zero-блок не найден:', targetId);
           }
         }
+
+        // На подстраницах скрываем лишние блоки: сиблинги и любые дубликаты с .model__cat по всей странице
+        const activeBlock = targetId ? document.querySelector(targetId) : null;
+        if (activeBlock) {
+          var blockIdsSet = {};
+          blocks1.forEach(function(id) { blockIdsSet[id] = true; });
+          function hideBlock(el) {
+            if (!el || el === activeBlock) return;
+            el.classList.add('v-inactive');
+            el.style.setProperty('display', 'none', 'important');
+            el.style.setProperty('height', '0', 'important');
+            el.style.setProperty('min-height', '0', 'important');
+            el.style.setProperty('overflow', 'hidden', 'important');
+            el.style.setProperty('visibility', 'hidden', 'important');
+            el.style.setProperty('margin', '0', 'important');
+            el.style.setProperty('padding', '0', 'important');
+          }
+          if (activeBlock.parentElement) {
+            [].forEach.call(activeBlock.parentElement.children, function(sibling) {
+              if (sibling === activeBlock) return;
+              if (sibling.querySelector && sibling.querySelector('.model__cat')) {
+                var sid = sibling.id ? '#' + sibling.id : '';
+                if (!sid || !blockIdsSet[sid]) hideBlock(sibling);
+              }
+            });
+          }
+          // Скрываем все остальные блоки с .model__cat на странице (дубликаты внизу, например на /catalog/mini-tables)
+          document.querySelectorAll('.model__cat').forEach(function(catEl) {
+            var wrapper = catEl.closest && catEl.closest('[id^="rec"]');
+            if (!wrapper) wrapper = catEl.parentElement;
+            if (wrapper && wrapper !== activeBlock) hideBlock(wrapper);
+          });
+        }
       }
 
       // Инициализация через Tilda API
@@ -226,13 +285,19 @@
                 return;
               }
               
-              // Скрываем только те блоки, которые связаны с табами
+              // Скрываем только те блоки, которые связаны с табами (полное схлопывание — без лишнего пространства)
               blocks1.forEach(function(blockId) {
                 const block = document.querySelector(blockId);
                 if (block) {
                   block.classList.add('v-inactive');
                   block.classList.remove('v-activetab');
-                  block.style.display = 'none';
+                  block.style.setProperty('display', 'none', 'important');
+                  block.style.setProperty('height', '0', 'important');
+                  block.style.setProperty('min-height', '0', 'important');
+                  block.style.setProperty('overflow', 'hidden', 'important');
+                  block.style.setProperty('visibility', 'hidden', 'important');
+                  block.style.setProperty('margin', '0', 'important');
+                  block.style.setProperty('padding', '0', 'important');
                 }
               });
 
@@ -278,12 +343,20 @@
               }
               
               if (tabToActivate) {
-                // Используем setTimeout для надежности
                 setTimeout(function() {
                   const { blocks1: currentBlocks } = collectTabsAndBlocks();
-                  // При инициализации не обновляем URL, если он уже правильный
                   const shouldUpdateUrl = currentRoute && tabToActivate.getAttribute('data-route') !== currentRoute;
                   show1(tabToActivate, currentBlocks, shouldUpdateUrl);
+                  // На подстранице (/catalog/tables/ и т.д.) повторно применяем состояние после загрузки DOM
+                  if (currentRoute) {
+                    [300, 800].forEach(function(ms) {
+                      setTimeout(function() {
+                        const { blocks1: cb } = collectTabsAndBlocks();
+                        var tab = findTabByRoute(getCurrentRoute()) || tabToActivate;
+                        show1(tab, cb, false);
+                      }, ms);
+                    });
+                  }
                 }, 50);
               }
             });
@@ -299,13 +372,19 @@
                 return;
               }
               
-              // Скрываем zero-блоки Tilda
+              // Скрываем zero-блоки Tilda (полное схлопывание)
               blocks1.forEach(function(blockId) {
                 const zeroBlock = document.querySelector(blockId);
                 if (zeroBlock) {
                   zeroBlock.classList.add('v-inactive');
                   zeroBlock.classList.remove('v-activetab');
-                  zeroBlock.style.display = 'none';
+                  zeroBlock.style.setProperty('display', 'none', 'important');
+                  zeroBlock.style.setProperty('height', '0', 'important');
+                  zeroBlock.style.setProperty('min-height', '0', 'important');
+                  zeroBlock.style.setProperty('overflow', 'hidden', 'important');
+                  zeroBlock.style.setProperty('visibility', 'hidden', 'important');
+                  zeroBlock.style.setProperty('margin', '0', 'important');
+                  zeroBlock.style.setProperty('padding', '0', 'important');
                 }
               });
 
@@ -353,6 +432,15 @@
                   const { blocks1: currentBlocks } = collectTabsAndBlocks();
                   const shouldUpdateUrl = currentRoute && tabToActivate.getAttribute('data-route') !== currentRoute;
                   show1(tabToActivate, currentBlocks, shouldUpdateUrl);
+                  if (currentRoute) {
+                    [300, 800].forEach(function(ms) {
+                      setTimeout(function() {
+                        const { blocks1: cb } = collectTabsAndBlocks();
+                        var tab = findTabByRoute(getCurrentRoute()) || tabToActivate;
+                        show1(tab, cb, false);
+                      }, ms);
+                    });
+                  }
                 }, 50);
               }
             }, 100);
@@ -379,13 +467,19 @@
           return;
         }
         
-        // Скрываем zero-блоки Tilda
+        // Скрываем zero-блоки Tilda (полное схлопывание)
         blocks1.forEach(function(blockId) {
           const zeroBlock = document.querySelector(blockId);
           if (zeroBlock) {
             zeroBlock.classList.add('v-inactive');
             zeroBlock.classList.remove('v-activetab');
-            zeroBlock.style.display = 'none';
+            zeroBlock.style.setProperty('display', 'none', 'important');
+            zeroBlock.style.setProperty('height', '0', 'important');
+            zeroBlock.style.setProperty('min-height', '0', 'important');
+            zeroBlock.style.setProperty('overflow', 'hidden', 'important');
+            zeroBlock.style.setProperty('visibility', 'hidden', 'important');
+            zeroBlock.style.setProperty('margin', '0', 'important');
+            zeroBlock.style.setProperty('padding', '0', 'important');
           }
         });
 
@@ -433,8 +527,25 @@
             const { blocks1: currentBlocks } = collectTabsAndBlocks();
             const shouldUpdateUrl = currentRoute && tabToActivate.getAttribute('data-route') !== currentRoute;
             show1(tabToActivate, currentBlocks, shouldUpdateUrl);
+            if (currentRoute) {
+              [300, 800].forEach(function(ms) {
+                setTimeout(function() {
+                  const { blocks1: cb } = collectTabsAndBlocks();
+                  var tab = findTabByRoute(getCurrentRoute()) || tabToActivate;
+                  show1(tab, cb, false);
+                }, ms);
+              });
+            }
           }, 50);
         }
       }
+
+      // На подстранице повторно применяем состояние после полной загрузки (Tilda может подгружать блоки позже)
+      window.addEventListener('load', function() {
+        if (!getCurrentRoute()) return;
+        setTimeout(function() {
+          if (activateTabByRoute(false)) {}
+        }, 100);
+      });
     })();
   </script>
