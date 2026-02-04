@@ -1,0 +1,562 @@
+<script>
+  // Функция инициализации слайдера (зеркала)
+  async function initRecommendationsSlider() {
+    const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
+    const IMG_BASE = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/mirrors/';
+
+    // Базовые данные рекомендаций — зеркала
+    const recommendationsBase = [
+      {
+        image: IMG_BASE + 'boteuf.png',
+        category: 'Зеркало',
+        title: 'Boteuf',
+        productId: 'boteuf',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/boteuf'
+      },
+      {
+        image: IMG_BASE + 'arkulo.png',
+        category: 'Зеркало',
+        title: 'Arkulo',
+        productId: 'arkulo',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/arkulo'
+      },
+      {
+        image: IMG_BASE + 'kuminus.png',
+        category: 'Зеркало',
+        title: 'Kuminus',
+        productId: 'kuminus',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/kuminus'
+      },
+      {
+        image: IMG_BASE + 'tunglur.png',
+        category: 'Зеркало',
+        title: 'Tunglur',
+        productId: 'tunglur',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/tunglur'
+      },
+      {
+        image: IMG_BASE + 'claruso.png',
+        category: 'Зеркало',
+        title: 'Claruso',
+        productId: 'claruso',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/claruso'
+      },
+      {
+        image: IMG_BASE + 'volnum.png',
+        category: 'Зеркало',
+        title: 'Volnum',
+        productId: 'volnum',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/volnum'
+      },
+      {
+        image: IMG_BASE + 'volnur.png',
+        category: 'Зеркало',
+        title: 'Volnur',
+        productId: 'volnur',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/volnur'
+      },
+      {
+        image: IMG_BASE + 'cerchios.png',
+        category: 'Зеркало',
+        title: 'Cerchios',
+        productId: 'cerchios',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/cerchios'
+      },
+      {
+        image: IMG_BASE + 'cerminos.png',
+        category: 'Зеркало',
+        title: 'Cerminos',
+        productId: 'cerminos',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/cerminos'
+      },
+      {
+        image: IMG_BASE + 'kadruf.png',
+        category: 'Зеркало',
+        title: 'Kadruf',
+        productId: 'kadruf',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/kadruf'
+      },
+      {
+        image: IMG_BASE + 'ventanum.png',
+        category: 'Зеркало',
+        title: 'Ventanum',
+        productId: 'ventanum',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/ventanum'
+      },
+      {
+        image: IMG_BASE + 'markuf.png',
+        category: 'Зеркало',
+        title: 'Markuf',
+        productId: 'markuf',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/markuf'
+      },
+      {
+        image: IMG_BASE + 'augaso.png',
+        category: 'Зеркало',
+        title: 'Augaso',
+        productId: 'augaso',
+        price: 'Загрузка...',
+        link: 'https://valonti.ru/catalog/mirrors/augaso'
+      },
+    ];
+
+    // Загружаем цены из JSON
+    let pricesData = {};
+    try {
+      const response = await fetch(PRICES_URL + '?t=' + Date.now());
+      pricesData = await response.json();
+    } catch (error) {
+      console.error('Ошибка загрузки цен:', error);
+    }
+
+    // Обновляем цены в рекомендациях
+    const recommendations = recommendationsBase.map(item => ({
+      ...item,
+      price: pricesData.prices && pricesData.prices[item.productId]
+        ? pricesData.prices[item.productId]
+        : item.price
+    }));
+
+    const listEl = document.querySelector('[data-recommendations-list]');
+    const prevBtn = document.querySelector('.recommendations__nav--prev');
+    const nextBtn = document.querySelector('.recommendations__nav--next');
+    const trackEl = document.querySelector('[data-recommendations-track]');
+    const sliderEl = document.querySelector('[data-recommendations-slider]');
+
+    if (!listEl || !prevBtn || !nextBtn || !sliderEl) {
+      setTimeout(initRecommendationsSlider, 100);
+      return;
+    }
+
+    let index = 0;
+    let isAnimating = false;
+
+    const getIsMobile = () => window.matchMedia('(max-width: 768px)').matches;
+    const getItemsPerView = () => getIsMobile() ? 1 : 2;
+
+    const getBaseSlides = () => Array.from(listEl.querySelectorAll(':scope > .recommendations__item:not(.recommendations__clone)'));
+    const getAllSlides = () => Array.from(listEl.querySelectorAll(':scope > .recommendations__item'));
+
+    const createCard = (item) => {
+      const card = document.createElement('a');
+      card.href = item.link;
+      card.className = 'recommendations__item model__item';
+      card.draggable = false;
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.title}" class="model__img vertical" draggable="false">
+        <div class="model__content">
+          <div class="model__content__left">
+            <p class="model__catname">${item.category}</p>
+            <h2 class="model__title">${item.title}</h2>
+          </div>
+          <div class="model__content__right">
+            <p class="model__price">${item.price}</p>
+          </div>
+        </div>
+      `;
+      return card;
+    };
+
+    const renderItems = () => {
+      listEl.innerHTML = '';
+      recommendations.forEach((item) => {
+        const card = createCard(item);
+        listEl.appendChild(card);
+      });
+    };
+
+    const cloneCard = (card) => {
+      const clone = card.cloneNode(true);
+      clone.classList.add('recommendations__clone');
+      return clone;
+    };
+
+    const buildClones = () => {
+      listEl.querySelectorAll(':scope > .recommendations__clone').forEach(clone => clone.remove());
+
+      const baseSlides = getBaseSlides();
+      if (!baseSlides.length) return;
+
+      if (getIsMobile()) {
+        index = 0;
+        return;
+      }
+
+      const perView = getItemsPerView();
+      const needed = Math.min(baseSlides.length, perView + 1);
+
+      const headClones = baseSlides.slice(0, needed).map(cloneCard);
+      headClones.forEach(clone => listEl.appendChild(clone));
+
+      const tailClones = baseSlides.slice(-needed).map(cloneCard);
+      tailClones.forEach(clone => listEl.insertBefore(clone, listEl.firstChild));
+
+      index = needed;
+    };
+
+    const setTransform = (instant = false) => {
+      const isMobile = getIsMobile();
+      const gap = isMobile ? 8 : 20;
+
+      if (!trackEl || trackEl.offsetWidth === 0) {
+        requestAnimationFrame(() => setTransform(instant));
+        return;
+      }
+
+      const slides = isMobile ? getBaseSlides() : getAllSlides();
+      if (slides.length === 0) {
+        requestAnimationFrame(() => setTransform(instant));
+        return;
+      }
+
+      const firstSlide = slides[0];
+      if (!firstSlide || firstSlide.offsetWidth === 0) {
+        requestAnimationFrame(() => setTransform(instant));
+        return;
+      }
+
+      const slideWidth = firstSlide.offsetWidth;
+      const translateX = -index * (slideWidth + gap);
+
+      if (instant) {
+        listEl.style.transition = 'none';
+      } else {
+        listEl.style.transition = 'transform 0.4s ease';
+      }
+
+      listEl.style.transform = `translateX(${translateX}px)`;
+    };
+
+    const snapIfLooped = () => {
+      if (getIsMobile()) return;
+
+      const baseSlides = getBaseSlides();
+      const realCount = baseSlides.length;
+      if (!realCount) return;
+
+      const perView = getItemsPerView();
+      const edge = Math.min(realCount, perView + 1);
+      const total = getAllSlides().length;
+
+      if (index >= total - edge) {
+        index = index - realCount;
+        setTransform(true);
+      } else if (index < edge) {
+        index = index + realCount;
+        setTransform(true);
+      }
+    };
+
+    const goPrev = (step = 1) => {
+      if (isAnimating || isDragging) return;
+      isAnimating = true;
+
+      if (getIsMobile()) {
+        index = Math.max(0, index - step);
+      } else {
+        index -= step;
+      }
+
+      setTransform();
+      setTimeout(() => {
+        snapIfLooped();
+        isAnimating = false;
+      }, 400);
+    };
+
+    const goNext = (step = 1) => {
+      if (isAnimating || isDragging) return;
+      isAnimating = true;
+
+      const baseSlides = getBaseSlides();
+      const realCount = baseSlides.length;
+
+      if (getIsMobile()) {
+        index = Math.min(realCount - 1, index + step);
+      } else {
+        index += step;
+      }
+
+      setTransform();
+      setTimeout(() => {
+        snapIfLooped();
+        isAnimating = false;
+      }, 400);
+    };
+
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      goPrev();
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      goNext();
+    });
+
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragCurrentX = 0;
+    let dragCurrentY = 0;
+    let isDragging = false;
+    let startTranslateX = 0;
+
+    const onPointerDown = (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (isAnimating) return;
+
+      if (e.target && typeof e.target.closest === 'function' && e.target.closest('.recommendations__nav')) return;
+
+      const isTouch = e.pointerType === 'touch' || e.pointerType === 'pen';
+      if (!isTouch) {
+        e.preventDefault();
+      }
+
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      dragCurrentX = e.clientX;
+      dragCurrentY = e.clientY;
+
+      const transform = listEl.style.transform;
+      const match = transform.match(/translateX\((-?\d+\.?\d*)px\)/);
+      startTranslateX = match ? parseFloat(match[1]) : 0;
+
+      listEl.classList.add('dragging');
+      sliderEl.classList.add('dragging');
+      listEl.style.transition = 'none';
+      try { sliderEl.setPointerCapture(e.pointerId); } catch (_) {}
+    };
+
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+
+      dragCurrentX = e.clientX;
+      dragCurrentY = e.clientY;
+      const deltaX = dragCurrentX - dragStartX;
+      const deltaY = dragCurrentY - dragStartY;
+
+      const isTouch = e.pointerType === 'touch' || e.pointerType === 'pen';
+      if (isTouch) {
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 5) {
+          e.preventDefault();
+        }
+      } else {
+        e.preventDefault();
+      }
+
+      const newTranslateX = startTranslateX + deltaX;
+      listEl.style.transform = `translateX(${newTranslateX}px)`;
+    };
+
+    const onPointerUp = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      listEl.classList.remove('dragging');
+      sliderEl.classList.remove('dragging');
+
+      const dx = dragCurrentX - dragStartX;
+      const dy = dragCurrentY - dragStartY;
+      const threshold = 30;
+
+      const isHorizontal = Math.abs(dx) > Math.abs(dy);
+      const isMobile = getIsMobile();
+
+      if (isHorizontal && Math.abs(dx) > threshold) {
+        e.preventDefault();
+        if (dx < 0) goNext();
+        else goPrev();
+      } else {
+        let clickedCard = null;
+        if (e.target && typeof e.target.closest === 'function') {
+          clickedCard = e.target.closest('.recommendations__item');
+        } else if (e.target) {
+          let el = e.target;
+          while (el && el !== document) {
+            if (el.classList && el.classList.contains('recommendations__item')) {
+              clickedCard = el;
+              break;
+            }
+            el = el.parentElement;
+          }
+        }
+
+        if (clickedCard && !clickedCard.classList.contains('recommendations__clone') && Math.abs(dx) < 10) {
+          setTimeout(() => {
+            if (clickedCard.href) {
+              window.location.href = clickedCard.href;
+            }
+          }, 10);
+        } else {
+          setTransform();
+        }
+      }
+    };
+
+    const handlePointerDown = (e) => {
+      if (e.target.closest('.recommendations__nav')) return;
+      onPointerDown(e);
+    };
+
+    sliderEl.addEventListener('pointerdown', handlePointerDown, { passive: false });
+    sliderEl.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1 && !isDragging && !isAnimating) {
+        const touch = e.touches[0];
+        const target = e.target;
+        const fakeEvent = {
+          pointerType: 'touch',
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          button: 0,
+          target: target,
+          preventDefault: () => e.preventDefault(),
+          stopPropagation: () => e.stopPropagation()
+        };
+        if (!fakeEvent.target.closest) {
+          fakeEvent.target.closest = function(selector) {
+            let el = this;
+            while (el && el !== document) {
+              if (el.matches && el.matches(selector)) return el;
+              el = el.parentElement;
+            }
+            return null;
+          };
+        }
+        handlePointerDown(fakeEvent);
+      }
+    }, { passive: false });
+
+    const handlePointerMove = (e) => onPointerMove(e);
+    const handlePointerUp = (e) => onPointerUp(e);
+
+    document.addEventListener('pointermove', handlePointerMove, { passive: false });
+    document.addEventListener('pointerup', handlePointerUp, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+      if (isDragging && e.touches.length === 1) {
+        const touch = e.touches[0];
+        const fakeEvent = {
+          pointerType: 'touch',
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          preventDefault: () => e.preventDefault()
+        };
+        handlePointerMove(fakeEvent);
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchend', (e) => {
+      if (isDragging) {
+        const touch = e.changedTouches[0];
+        const target = e.target;
+        const fakeEvent = {
+          pointerType: 'touch',
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          target: target,
+          preventDefault: () => e.preventDefault()
+        };
+        if (!fakeEvent.target.closest) {
+          fakeEvent.target.closest = function(selector) {
+            let el = this;
+            while (el && el !== document) {
+              if (el.matches && el.matches(selector)) return el;
+              el = el.parentElement;
+            }
+            return null;
+          };
+        }
+        handlePointerUp(fakeEvent);
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchcancel', () => {
+      if (isDragging) {
+        isDragging = false;
+        listEl.classList.remove('dragging');
+        sliderEl.classList.remove('dragging');
+        setTransform();
+      }
+    });
+
+    document.addEventListener('pointercancel', () => {
+      if (isDragging) {
+        isDragging = false;
+        listEl.classList.remove('dragging');
+        sliderEl.classList.remove('dragging');
+        setTransform();
+      }
+    });
+
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const baseSlides = getBaseSlides();
+        const realCount = baseSlides.length;
+
+        if (getIsMobile()) {
+          index = Math.min(realCount - 1, Math.max(0, index));
+        } else {
+          const perView = getItemsPerView();
+          const edge = Math.min(realCount, perView + 1);
+          const realIndex = ((index - edge) % realCount + realCount) % realCount;
+          index = edge + realIndex;
+        }
+
+        buildClones();
+        if (getIsMobile()) {
+          index = 0;
+        }
+        setTransform(true);
+      }, 150);
+    });
+
+    const init = () => {
+      index = 0;
+
+      renderItems();
+
+      requestAnimationFrame(() => {
+        buildClones();
+        requestAnimationFrame(() => {
+          if (getIsMobile()) {
+            index = 0;
+          }
+          setTransform(true);
+        });
+      });
+    };
+
+    init();
+
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+
+  (function() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initRecommendationsSlider);
+    } else {
+      initRecommendationsSlider();
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(initRecommendationsSlider, 200);
+    });
+  })();
+</script>
