@@ -250,6 +250,8 @@ function initRecommendationsSlider() {
   let dragCurrentY = 0;
   let isDragging = false;
   let startTranslateX = 0;
+  /** Элемент под указателем при pointerdown (для клика по карточке после setPointerCapture) */
+  let pointerDownTarget = null;
 
   const onPointerDown = (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
@@ -257,6 +259,9 @@ function initRecommendationsSlider() {
     
     // Игнорируем клики на кнопках навигации
     if (e.target && typeof e.target.closest === 'function' && e.target.closest('.recommendations__nav')) return;
+    
+    // Запоминаем элемент под указателем до setPointerCapture (на десктопе pointerup придёт на слайдер)
+    pointerDownTarget = e.target;
     
     // Отключаем стандартное поведение для ссылок и изображений только на touch устройствах
     // На мобилке не блокируем сразу, чтобы не мешать скроллу
@@ -314,25 +319,28 @@ function initRecommendationsSlider() {
 
     const dx = dragCurrentX - dragStartX;
     const dy = dragCurrentY - dragStartY;
-    const threshold = 30; // минимальное расстояние для переключения на мобилке
+    const dragThreshold = 45; // только явный драг переключает слайдер (клик приоритетнее)
+    const clickThreshold = 20; // движение до 20px считаем кликом
     
     // Проверяем, что движение было преимущественно горизонтальным
     const isHorizontal = Math.abs(dx) > Math.abs(dy);
     const isMobile = getIsMobile();
     
-    if (isHorizontal && Math.abs(dx) > threshold) {
+    if (isHorizontal && Math.abs(dx) > dragThreshold) {
       // Это был горизонтальный свайп - переключаем слайдер
       e.preventDefault();
+      pointerDownTarget = null;
       if (dx < 0) goNext();
       else goPrev();
     } else {
       // Малое движение или вертикальное - это был клик/скролл
+      // На десктопе после setPointerCapture e.target может быть слайдер — используем сохранённый pointerDownTarget
+      const clickTarget = pointerDownTarget || e.target;
       let clickedCard = null;
-      if (e.target && typeof e.target.closest === 'function') {
-        clickedCard = e.target.closest('.recommendations__item');
-      } else if (e.target) {
-        // Fallback для старых браузеров
-        let el = e.target;
+      if (clickTarget && typeof clickTarget.closest === 'function') {
+        clickedCard = clickTarget.closest('.recommendations__item');
+      } else if (clickTarget) {
+        let el = clickTarget;
         while (el && el !== document) {
           if (el.classList && el.classList.contains('recommendations__item')) {
             clickedCard = el;
@@ -342,18 +350,17 @@ function initRecommendationsSlider() {
         }
       }
       
-      if (clickedCard && !clickedCard.classList.contains('recommendations__clone') && Math.abs(dx) < 10) {
-        // Переход по ссылке только для реальных карточек и только если не было свайпа
-        setTimeout(() => {
-          if (clickedCard.href) {
-            window.location.href = clickedCard.href;
-          }
-        }, 10);
-      } else {
-        // Возвращаем на место
-        setTransform();
+      if (clickedCard && Math.abs(dx) < clickThreshold && Math.abs(dy) < clickThreshold) {
+        // Переход по ссылке при клике (реальная карточка и клон имеют один и тот же href)
+        const href = clickedCard.href;
+        if (href) {
+          window.location.href = href;
+        }
       }
+      // Возвращаем слайдер на место при любом исходе (клик или нет)
+      setTransform();
     }
+    pointerDownTarget = null;
   };
 
   // Обработчики на всю секцию слайдера для drag & drop
@@ -450,6 +457,7 @@ function initRecommendationsSlider() {
   document.addEventListener('touchcancel', () => { 
     if (isDragging) {
       isDragging = false;
+      pointerDownTarget = null;
       listEl.classList.remove('dragging');
       sliderEl.classList.remove('dragging');
       setTransform();
@@ -459,6 +467,7 @@ function initRecommendationsSlider() {
   document.addEventListener('pointercancel', () => { 
     if (isDragging) {
       isDragging = false;
+      pointerDownTarget = null;
       listEl.classList.remove('dragging');
       sliderEl.classList.remove('dragging');
       setTransform();

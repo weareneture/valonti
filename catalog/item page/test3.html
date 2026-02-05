@@ -1,0 +1,141 @@
+<script>
+(function() {
+  'use strict';
+
+  var CLICK_THRESHOLD = 20; /* клик приоритетнее, драг второстепенный */
+
+  /* Стили: pointer для кликабельных слайдов */
+  if (!document.getElementById('test3-slider-cursors')) {
+    var style = document.createElement('style');
+    style.id = 'test3-slider-cursors';
+    style.textContent = '.uc-carousel .uc-slide a[href], .uc-carousel .uc-slide [onclick]{ cursor: pointer; }';
+    document.head.appendChild(style);
+  }
+
+  /** Патч 1: слайдер "Смотрите также" (каталог). После setPointerCapture pointerup приходит на слайдер — сохраняем target при pointerdown. */
+  var patchSlider = {
+    slider: null,
+    pointerTarget: null,
+    startX: 0,
+    startY: 0,
+    CLICK_THRESHOLD: CLICK_THRESHOLD,
+
+    init: function() {
+      var self = this;
+      function run() {
+        self.slider = document.querySelector('[data-recommendations-slider]');
+        if (!self.slider) return;
+        self.install();
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', run);
+      } else {
+        run();
+      }
+      window.addEventListener('load', function() {
+        if (!self.slider) setTimeout(run, 150);
+      });
+    },
+
+    install: function() {
+      var self = this;
+      var slider = this.slider;
+
+      // Запоминаем элемент под указателем в фазе capture (до базового скрипта)
+      slider.addEventListener('pointerdown', function(e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        if (e.target && e.target.closest && e.target.closest('.recommendations__nav')) return;
+        self.pointerTarget = e.target;
+        self.startX = e.clientX;
+        self.startY = e.clientY;
+      }, true);
+
+      // После pointerup базового скрипта проверяем: если это был клик — переходим по ссылке
+      document.addEventListener('pointerup', function(e) {
+        if (!self.pointerTarget || !slider.contains(self.pointerTarget)) {
+          self.pointerTarget = null;
+          return;
+        }
+        var card = self.getCard(self.pointerTarget);
+        var dx = e.clientX - self.startX;
+        var dy = e.clientY - self.startY;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        var wasClick = distance <= self.CLICK_THRESHOLD;
+        self.pointerTarget = null;
+        if (!card || !wasClick) return;
+        var href = card.href;
+        if (href) {
+          window.location.href = href;
+        }
+      }, false);
+
+      document.addEventListener('pointercancel', function() {
+        self.pointerTarget = null;
+      });
+
+      this.slider = slider;
+    },
+
+    getCard: function(el) {
+      if (!el || !el.closest) return null;
+      return el.closest('.recommendations__item');
+    }
+  };
+
+  /** Патч 2: uc-carousel (главная, блок «Пространства»). viewport.setPointerCapture забирает pointerup — сохраняем target при pointerdown и при клике переходим по ссылке / вызываем onclick. */
+  var ucPointerTarget = null;
+  var ucStartX = 0;
+  var ucStartY = 0;
+
+  function installUcCarouselPatch() {
+    var viewports = document.querySelectorAll('.uc-carousel .uc-viewport');
+    if (!viewports.length) return;
+    viewports.forEach(function(viewport) {
+      if (viewport.dataset.test3UcPatch === '1') return;
+      viewport.dataset.test3UcPatch = '1';
+      viewport.addEventListener('pointerdown', function(e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        if (e.target && e.target.closest && e.target.closest('.uc-nav')) return;
+        ucPointerTarget = e.target;
+        ucStartX = e.clientX;
+        ucStartY = e.clientY;
+      }, true);
+    });
+  }
+
+  document.addEventListener('pointerup', function(e) {
+    if (!ucPointerTarget) return;
+    var dx = e.clientX - ucStartX;
+    var dy = e.clientY - ucStartY;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    var wasClick = distance <= CLICK_THRESHOLD;
+    var target = ucPointerTarget;
+    ucPointerTarget = null;
+    if (!wasClick) return;
+    var link = target && target.closest ? target.closest('a[href]') : null;
+    if (link && link.href) {
+      window.location.href = link.href;
+      return;
+    }
+    var withOnclick = target && target.closest ? target.closest('[onclick]') : null;
+    if (withOnclick) {
+      withOnclick.click();
+    }
+  }, false);
+
+  document.addEventListener('pointercancel', function() {
+    ucPointerTarget = null;
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', installUcCarouselPatch);
+  } else {
+    installUcCarouselPatch();
+  }
+  window.addEventListener('load', function() {
+    setTimeout(installUcCarouselPatch, 200);
+  });
+
+  patchSlider.init();
+})();
+</script>

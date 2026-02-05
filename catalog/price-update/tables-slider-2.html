@@ -412,16 +412,17 @@
         if (isHorizontal && Math.abs(dx) > threshold) {
           // Это был горизонтальный свайп - переключаем слайдер
           e.preventDefault();
+          pointerDownTarget = null;
           if (dx < 0) goNext();
           else goPrev();
         } else {
-          // Малое движение или вертикальное - это был клик/скролл
+          // Малое движение или вертикальное - это был клик/скролл (на десктопе e.target может быть слайдер из-за setPointerCapture)
+          const clickTarget = pointerDownTarget || e.target;
           let clickedCard = null;
-          if (e.target && typeof e.target.closest === 'function') {
-            clickedCard = e.target.closest('.recommendations__item');
-          } else if (e.target) {
-            // Fallback для старых браузеров
-            let el = e.target;
+          if (clickTarget && typeof clickTarget.closest === 'function') {
+            clickedCard = clickTarget.closest('.recommendations__item');
+          } else if (clickTarget) {
+            let el = clickTarget;
             while (el && el !== document) {
               if (el.classList && el.classList.contains('recommendations__item')) {
                 clickedCard = el;
@@ -431,18 +432,12 @@
             }
           }
           
-          if (clickedCard && !clickedCard.classList.contains('recommendations__clone') && Math.abs(dx) < 10) {
-            // Переход по ссылке только для реальных карточек и только если не было свайпа
-            setTimeout(() => {
-              if (clickedCard.href) {
-                window.location.href = clickedCard.href;
-              }
-            }, 10);
-          } else {
-            // Возвращаем на место
-            setTransform();
+          if (clickedCard && Math.abs(dx) < 10 && clickedCard.href) {
+            window.location.href = clickedCard.href;
           }
+          setTransform();
         }
+        pointerDownTarget = null;
       };
     
       // Обработчики на всю секцию слайдера для drag & drop
@@ -539,6 +534,7 @@
       document.addEventListener('touchcancel', () => { 
         if (isDragging) {
           isDragging = false;
+          pointerDownTarget = null;
           listEl.classList.remove('dragging');
           sliderEl.classList.remove('dragging');
           setTransform();
@@ -548,6 +544,7 @@
       document.addEventListener('pointercancel', () => { 
         if (isDragging) {
           isDragging = false;
+          pointerDownTarget = null;
           listEl.classList.remove('dragging');
           sliderEl.classList.remove('dragging');
           setTransform();
