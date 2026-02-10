@@ -1,0 +1,572 @@
+<script>
+    // Функция инициализации слайдера
+    async function initRecommendationsSlider() {
+      const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
+      
+      // Базовые данные рекомендаций (консоли)
+      const recommendationsBase = [
+        {
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/spalur.png',
+          category: 'Консоль',
+          title: 'Spalur',
+          productId: 'spalur',
+          price: 'Загрузка...',
+          link: 'https://valonti.ru/catalog/consoles/spalur'
+        },
+        {
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/cryssor.png',
+          category: 'Консоль',
+          title: 'Cryssor',
+          productId: 'cryssor',
+          price: 'Загрузка...',
+          link: 'https://valonti.ru/catalog/consoles/cryssor'
+        },
+        {
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/fiamis.png',
+          category: 'Консоль',
+          title: 'Fiamis',
+          productId: 'fiamis',
+          price: 'Загрузка...',
+          link: 'https://valonti.ru/catalog/consoles/fiamis'
+        },
+        {
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/spazium.png',
+          category: 'Консоль',
+          title: 'Spazium',
+          productId: 'spazium',
+          price: 'Загрузка...',
+          link: 'https://valonti.ru/catalog/consoles/spazium'
+        },
+        {
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/itafis.png',
+          category: 'Консоль',
+          title: 'Itafis',
+          productId: 'itafis',
+          price: 'Загрузка...',
+          link: 'https://valonti.ru/catalog/consoles/itafis'
+        },
+        {
+          image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/itafiso.png',
+          category: 'Консоль',
+          title: 'Itafiso',
+          productId: 'itafiso',
+          price: 'Загрузка...',
+          link: 'https://valonti.ru/catalog/consoles/itafiso'
+        },
+      ];
+      
+      // Загружаем цены из JSON
+      let pricesData = {};
+      try {
+        const response = await fetch(PRICES_URL + '?t=' + Date.now());
+        pricesData = await response.json();
+      } catch (error) {
+        console.error('Ошибка загрузки цен:', error);
+      }
+      
+      // Обновляем цены в рекомендациях
+      const recommendations = recommendationsBase.map(item => ({
+        ...item,
+        price: pricesData.prices && pricesData.prices[item.productId] 
+          ? pricesData.prices[item.productId] 
+          : item.price
+      }));
+    
+      const listEl = document.querySelector('[data-recommendations-list]');
+      const prevBtn = document.querySelector('.recommendations__nav--prev');
+      const nextBtn = document.querySelector('.recommendations__nav--next');
+      const trackEl = document.querySelector('[data-recommendations-track]');
+      const sliderEl = document.querySelector('[data-recommendations-slider]');
+    
+      if (!listEl || !prevBtn || !nextBtn || !sliderEl) {
+        // Если элементы не найдены, пробуем еще раз через небольшую задержку (для Tilda)
+        setTimeout(initRecommendationsSlider, 100);
+        return;
+      }
+    
+      let index = 0; // индекс с учетом клонов
+      let isAnimating = false;
+      
+      const getIsMobile = () => window.matchMedia('(max-width: 768px)').matches;
+      const getItemsPerView = () => getIsMobile() ? 1 : 2;
+      
+      // Получаем только реальные слайды (без клонов)
+      const getBaseSlides = () => Array.from(listEl.querySelectorAll(':scope > .recommendations__item:not(.recommendations__clone)'));
+      
+      // Получаем все слайды (включая клоны)
+      const getAllSlides = () => Array.from(listEl.querySelectorAll(':scope > .recommendations__item'));
+    
+      const createCard = (item) => {
+        const card = document.createElement('a');
+        card.href = item.link;
+        card.className = 'recommendations__item model__item';
+        card.draggable = false;
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.title}" class="model__img" draggable="false">
+          <div class="model__content">
+            <div class="model__content__left">
+              <p class="model__catname">${item.category}</p>
+              <h2 class="model__title">${item.title}</h2>
+            </div>
+            <div class="model__content__right">
+              <p class="model__price">${item.price}</p>
+            </div>
+          </div>
+        `;
+        return card;
+      };
+    
+      const renderItems = () => {
+        listEl.innerHTML = '';
+        // Рендерим реальные слайды
+        recommendations.forEach((item) => {
+          const card = createCard(item);
+          listEl.appendChild(card);
+        });
+      };
+    
+      const cloneCard = (card) => {
+        const clone = card.cloneNode(true);
+        clone.classList.add('recommendations__clone');
+        return clone;
+      };
+    
+      const buildClones = () => {
+        // Удаляем старые клоны
+        listEl.querySelectorAll(':scope > .recommendations__clone').forEach(clone => clone.remove());
+        
+        const baseSlides = getBaseSlides();
+        if (!baseSlides.length) return;
+        
+        const isMobile = getIsMobile();
+        
+        // На мобилке не создаем клоны - простой слайдер без бесконечности
+        if (isMobile) {
+          index = 0; // Начинаем с первого слайда
+          return;
+        }
+        
+        // На десктопе создаем клоны для бесконечного эффекта
+        const perView = getItemsPerView();
+        const needed = Math.min(baseSlides.length, perView + 1);
+        
+        // Клоны в конце (первые N слайдов) - добавляем в конец для бесконечного скролла вправо
+        const headClones = baseSlides.slice(0, needed).map(cloneCard);
+        headClones.forEach(clone => listEl.appendChild(clone));
+        
+        // Клоны в начале (последние N слайдов) - добавляем в начало для бесконечного скролла влево
+        const tailClones = baseSlides.slice(-needed).map(cloneCard);
+        tailClones.forEach(clone => listEl.insertBefore(clone, listEl.firstChild));
+        
+        // Устанавливаем начальный индекс на первый реальный слайд (после клонов слева)
+        index = needed;
+      };
+    
+      const setTransform = (instant = false) => {
+        const isMobile = getIsMobile();
+        const gap = isMobile ? 8 : 20;
+        
+        if (!trackEl || trackEl.offsetWidth === 0) {
+          requestAnimationFrame(() => setTransform(instant));
+          return;
+        }
+        
+        // Получаем слайды (на мобилке только реальные, на десктопе включая клоны)
+        const slides = isMobile ? getBaseSlides() : getAllSlides();
+        if (slides.length === 0) {
+          requestAnimationFrame(() => setTransform(instant));
+          return;
+        }
+        
+        const firstSlide = slides[0];
+        if (!firstSlide || firstSlide.offsetWidth === 0) {
+          requestAnimationFrame(() => setTransform(instant));
+          return;
+        }
+        
+        // Простой расчет для всех устройств
+        const slideWidth = firstSlide.offsetWidth;
+        const translateX = -index * (slideWidth + gap);
+        
+        if (instant) {
+          listEl.style.transition = 'none';
+        } else {
+          listEl.style.transition = 'transform 0.4s ease';
+        }
+        
+        listEl.style.transform = `translateX(${translateX}px)`;
+      };
+    
+      const snapIfLooped = () => {
+        // На мобилке не используем бесконечный слайдер
+        if (getIsMobile()) return;
+        
+        const baseSlides = getBaseSlides();
+        const realCount = baseSlides.length;
+        if (!realCount) return;
+        
+        const perView = getItemsPerView();
+        const edge = Math.min(realCount, perView + 1);
+        const total = getAllSlides().length;
+        
+        // Если достигли конца клонов справа - перепрыгиваем на начало реальных
+        if (index >= total - edge) {
+          index = index - realCount;
+          setTransform(true);
+        }
+        // Если достигли начала клонов слева - перепрыгиваем на конец реальных
+        else if (index < edge) {
+          index = index + realCount;
+          setTransform(true);
+        }
+      };
+    
+      const goPrev = (step = 1) => {
+        if (isAnimating || isDragging) return;
+        isAnimating = true;
+        
+        const baseSlides = getBaseSlides();
+        const realCount = baseSlides.length;
+        
+        // На мобилке просто уменьшаем индекс с проверкой границ
+        if (getIsMobile()) {
+          index = Math.max(0, index - step);
+        } else {
+          index -= step;
+        }
+        
+        setTransform();
+        setTimeout(() => {
+          snapIfLooped();
+          isAnimating = false;
+        }, 400);
+      };
+    
+      const goNext = (step = 1) => {
+        if (isAnimating || isDragging) return;
+        isAnimating = true;
+        
+        const baseSlides = getBaseSlides();
+        const realCount = baseSlides.length;
+        
+        // На мобилке просто увеличиваем индекс с проверкой границ
+        if (getIsMobile()) {
+          index = Math.min(realCount - 1, index + step);
+        } else {
+          index += step;
+        }
+        
+        setTransform();
+        setTimeout(() => {
+          snapIfLooped();
+          isAnimating = false;
+        }, 400);
+      };
+    
+      // Обработчики для стрелок
+      prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        goPrev();
+      });
+      
+      nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        goNext();
+      });
+    
+      // Drag & Drop для десктопа и свайп для мобилки
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let dragCurrentX = 0;
+      let dragCurrentY = 0;
+      let isDragging = false;
+      let startTranslateX = 0;
+    
+      const onPointerDown = (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        if (isAnimating) return;
+        
+        // Игнорируем клики на кнопках навигации
+        if (e.target && typeof e.target.closest === 'function' && e.target.closest('.recommendations__nav')) return;
+        
+        // Отключаем стандартное поведение для ссылок и изображений только на touch устройствах
+        // На мобилке не блокируем сразу, чтобы не мешать скроллу
+        const isTouch = e.pointerType === 'touch' || e.pointerType === 'pen';
+        if (!isTouch) {
+          e.preventDefault();
+        }
+        
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        dragCurrentX = e.clientX;
+        dragCurrentY = e.clientY;
+        
+        // Получаем текущую позицию из transform (учитывает центрирование на мобилке)
+        const transform = listEl.style.transform;
+        const match = transform.match(/translateX\((-?\d+\.?\d*)px\)/);
+        startTranslateX = match ? parseFloat(match[1]) : 0;
+        
+        listEl.classList.add('dragging');
+        sliderEl.classList.add('dragging');
+        listEl.style.transition = 'none'; // отключаем анимацию при drag
+        try { sliderEl.setPointerCapture(e.pointerId); } catch (_) {}
+      };
+    
+      const onPointerMove = (e) => {
+        if (!isDragging) return;
+        
+        dragCurrentX = e.clientX;
+        dragCurrentY = e.clientY;
+        const deltaX = dragCurrentX - dragStartX;
+        const deltaY = dragCurrentY - dragStartY;
+        
+        // На мобилке проверяем, что это горизонтальное движение
+        const isTouch = e.pointerType === 'touch' || e.pointerType === 'pen';
+        if (isTouch) {
+          // Блокируем скролл только если горизонтальное движение больше вертикального
+          if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 5) {
+            e.preventDefault();
+          }
+        } else {
+          e.preventDefault();
+        }
+        
+        const newTranslateX = startTranslateX + deltaX;
+        listEl.style.transform = `translateX(${newTranslateX}px)`;
+      };
+    
+    
+      const onPointerUp = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        listEl.classList.remove('dragging');
+        sliderEl.classList.remove('dragging');
+    
+        const dx = dragCurrentX - dragStartX;
+        const dy = dragCurrentY - dragStartY;
+        const threshold = 30; // минимальное расстояние для переключения на мобилке
+        
+        // Проверяем, что движение было преимущественно горизонтальным
+        const isHorizontal = Math.abs(dx) > Math.abs(dy);
+        const isMobile = getIsMobile();
+        
+        if (isHorizontal && Math.abs(dx) > threshold) {
+          // Это был горизонтальный свайп - переключаем слайдер
+          e.preventDefault();
+          if (dx < 0) goNext();
+          else goPrev();
+        } else {
+          // Малое движение или вертикальное - это был клик/скролл
+          let clickedCard = null;
+          if (e.target && typeof e.target.closest === 'function') {
+            clickedCard = e.target.closest('.recommendations__item');
+          } else if (e.target) {
+            // Fallback для старых браузеров
+            let el = e.target;
+            while (el && el !== document) {
+              if (el.classList && el.classList.contains('recommendations__item')) {
+                clickedCard = el;
+                break;
+              }
+              el = el.parentElement;
+            }
+          }
+          
+          if (clickedCard && !clickedCard.classList.contains('recommendations__clone') && Math.abs(dx) < 10) {
+            // Переход по ссылке только для реальных карточек и только если не было свайпа
+            setTimeout(() => {
+              if (clickedCard.href) {
+                window.location.href = clickedCard.href;
+              }
+            }, 10);
+          } else {
+            // Возвращаем на место
+            setTransform();
+          }
+        }
+      };
+    
+      // Обработчики на всю секцию слайдера для drag & drop
+      // Игнорируем только клики на кнопках навигации
+      const handlePointerDown = (e) => {
+        // Игнорируем клики на кнопках навигации
+        if (e.target.closest('.recommendations__nav')) return;
+        onPointerDown(e);
+      };
+      
+      sliderEl.addEventListener('pointerdown', handlePointerDown, { passive: false });
+      // Также добавляем touch события для лучшей совместимости на мобилке
+      sliderEl.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1 && !isDragging && !isAnimating) {
+          const touch = e.touches[0];
+          const target = e.target;
+          // Создаем объект события, совместимый с pointer событиями
+          const fakeEvent = {
+            pointerType: 'touch',
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+            button: 0,
+            target: target,
+            preventDefault: () => e.preventDefault(),
+            stopPropagation: () => e.stopPropagation()
+          };
+          // Добавляем closest метод если его нет
+          if (!fakeEvent.target.closest) {
+            fakeEvent.target.closest = function(selector) {
+              let el = this;
+              while (el && el !== document) {
+                if (el.matches && el.matches(selector)) return el;
+                el = el.parentElement;
+              }
+              return null;
+            };
+          }
+          handlePointerDown(fakeEvent);
+        }
+      }, { passive: false });
+      
+      // Обработчики на document для корректной работы drag
+      const handlePointerMove = (e) => {
+        onPointerMove(e);
+      };
+      
+      const handlePointerUp = (e) => {
+        onPointerUp(e);
+      };
+      
+      document.addEventListener('pointermove', handlePointerMove, { passive: false });
+      document.addEventListener('pointerup', handlePointerUp, { passive: false });
+      
+      // Touch события для мобилки
+      document.addEventListener('touchmove', (e) => {
+        if (isDragging && e.touches.length === 1) {
+          const touch = e.touches[0];
+          const fakeEvent = {
+            pointerType: 'touch',
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+            preventDefault: () => e.preventDefault()
+          };
+          handlePointerMove(fakeEvent);
+        }
+      }, { passive: false });
+      
+      document.addEventListener('touchend', (e) => {
+        if (isDragging) {
+          const touch = e.changedTouches[0];
+          const target = e.target;
+          const fakeEvent = {
+            pointerType: 'touch',
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+            target: target,
+            preventDefault: () => e.preventDefault()
+          };
+          // Добавляем closest метод если его нет
+          if (!fakeEvent.target.closest) {
+            fakeEvent.target.closest = function(selector) {
+              let el = this;
+              while (el && el !== document) {
+                if (el.matches && el.matches(selector)) return el;
+                el = el.parentElement;
+              }
+              return null;
+            };
+          }
+          handlePointerUp(fakeEvent);
+        }
+      }, { passive: false });
+      
+      document.addEventListener('touchcancel', () => { 
+        if (isDragging) {
+          isDragging = false;
+          listEl.classList.remove('dragging');
+          sliderEl.classList.remove('dragging');
+          setTransform();
+        }
+      });
+      
+      document.addEventListener('pointercancel', () => { 
+        if (isDragging) {
+          isDragging = false;
+          listEl.classList.remove('dragging');
+          sliderEl.classList.remove('dragging');
+          setTransform();
+        }
+      });
+    
+      // Ресайз
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const baseSlides = getBaseSlides();
+          const realCount = baseSlides.length;
+          
+          if (getIsMobile()) {
+            // На мобилке просто ограничиваем индекс реальными слайдами
+            index = Math.min(realCount - 1, Math.max(0, index));
+          } else {
+            // На десктопе сохраняем текущий реальный индекс для бесконечного слайдера
+            const perView = getItemsPerView();
+            const edge = Math.min(realCount, perView + 1);
+            const realIndex = ((index - edge) % realCount + realCount) % realCount;
+            index = edge + realIndex;
+          }
+          
+          buildClones();
+          // После buildClones на мобилке индекс должен быть 0
+          if (getIsMobile()) {
+            index = 0;
+          }
+          setTransform(true);
+        }, 150);
+      });
+    
+      // Инициализация
+      const init = () => {
+        // Всегда начинаем с индекса 0
+        index = 0;
+        
+        renderItems();
+        
+        // Ждем, пока DOM обновится и слайды получат правильную ширину
+        requestAnimationFrame(() => {
+          buildClones();
+          // Еще один кадр, чтобы слайды получили ширину
+          requestAnimationFrame(() => {
+            // Убеждаемся, что на мобилке индекс = 0 (buildClones уже установил, но на всякий случай)
+            if (getIsMobile()) {
+              index = 0;
+            }
+            setTransform(true);
+          });
+        });
+      };
+    
+      init();
+      
+      // Убеждаемся, что кнопки всегда активны (бесконечный слайдер)
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+    }
+    
+    // Инициализация с несколькими попытками для Tilda
+    (function() {
+      // Пробуем сразу
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initRecommendationsSlider);
+      } else {
+        // DOM уже загружен
+        initRecommendationsSlider();
+      }
+      
+      // Дополнительная попытка после полной загрузки страницы (для Tilda)
+      window.addEventListener('load', () => {
+        setTimeout(initRecommendationsSlider, 200);
+      });
+    })();
+    </script>
