@@ -1,0 +1,153 @@
+<!-- ========== "Стеллажи"  ========== -->
+
+<div class="model__cat">
+  
+  <div class="model__item third" onclick="window.location.href='https://valonti.ru/catalog/shelves/alitum'" data-product-id="alitum">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/alitum.png" alt="Alitum" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Alitum</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item third" onclick="window.location.href='https://valonti.ru/catalog/shelves/lamius'" data-product-id="lamius">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/lamius.png" alt="Lamius" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Lamius</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/shelves/aranix'" data-product-id="aranix">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/aranix.png" alt="Aranix" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Aranix</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item third" onclick="window.location.href='https://valonti.ru/catalog/shelves/clipelis'" data-product-id="clipelis">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/clipelis.png" alt="Clipelis" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Clipelis</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item third" onclick="window.location.href='https://valonti.ru/catalog/shelves/nolvum'" data-product-id="nolvum">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/nolvum.png" alt="Nolvum" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Nolvum</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item big" onclick="window.location.href='https://valonti.ru/catalog/shelves/hillfo'" data-product-id="hillfo">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/hillfo.png" alt="Hillfo" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Hillfo</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item big" onclick="window.location.href='https://valonti.ru/catalog/shelves/pavily'" data-product-id="pavily">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/pavily.png" alt="Pavily" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Pavily</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item third" onclick="window.location.href='https://valonti.ru/catalog/shelves/spessum'" data-product-id="spessum">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/spessum.png" alt="Spessum" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Стеллаж</p>
+        <h2 class="model__title">Spessum</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+
+<script>
+(function() {
+const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
+
+async function updatePrices() {
+  try {
+    const items = document.querySelectorAll('.model__item[data-product-id]');
+    if (items.length === 0) {
+      setTimeout(updatePrices, 100);
+      return;
+    }
+    
+    const response = await fetch(PRICES_URL + '?t=' + Date.now());
+    const data = await response.json();
+    
+    if (!data.prices) return;
+    
+    items.forEach(item => {
+      const productId = item.getAttribute('data-product-id');
+      const priceElement = item.querySelector('.model__price');
+      
+      if (priceElement && data.prices[productId]) {
+        priceElement.textContent = data.prices[productId];
+      }
+    });
+  } catch (error) {
+    console.error('Ошибка загрузки цен:', error);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updatePrices);
+} else {
+  updatePrices();
+}
+
+// Дополнительная попытка для Tilda
+window.addEventListener('load', () => {
+  setTimeout(updatePrices, 200);
+});
+})();
+</script>
