@@ -3,87 +3,71 @@
   async function initRecommendationsSlider() {
     const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
     
-    // Базовые данные рекомендаций (все модели из tables-info.html)
+    // Базовые данные рекомендаций (стеллажи)
     const recommendationsBase = [
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisum-oval.png',
-        category: 'Стол',
-        title: 'Agisum Oval',
-        productId: 'agisum-oval',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/alitum.png',
+        category: 'Стеллаж',
+        title: 'Alitum',
+        productId: 'alitum',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/agisum-oval'
+        link: 'https://valonti.ru/catalog/shelves/alitum'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisum.png',
-        category: 'Стол',
-        title: 'Agisum',
-        productId: 'agisum',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/lamius.png',
+        category: 'Стеллаж',
+        title: 'Lamius',
+        productId: 'lamius',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/agisum'
+        link: 'https://valonti.ru/catalog/shelves/lamius'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisu.png',
-        category: 'Стол',
-        title: 'Agisu',
-        productId: 'agisu',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/aranix.png',
+        category: 'Стеллаж',
+        title: 'Aranix',
+        productId: 'aranix',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/agisu'
+        link: 'https://valonti.ru/catalog/shelves/aranix'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/areolum.png',
-        category: 'Стол',
-        title: 'Areolum',
-        productId: 'areolum',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/clipelis.png',
+        category: 'Стеллаж',
+        title: 'Clipelis',
+        productId: 'clipelis',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/areolum'
+        link: 'https://valonti.ru/catalog/shelves/clipelis'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisumus.png',
-        category: 'Стол',
-        title: 'Agisumus',
-        productId: 'agisumus',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/nolvum.png',
+        category: 'Стеллаж',
+        title: 'Nolvum',
+        productId: 'nolvum',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/agisumus'
+        link: 'https://valonti.ru/catalog/shelves/nolvum'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/cryssora.png',
-        category: 'Стол',
-        title: 'Cryssora',
-        productId: 'cryssora',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/hillfo.png',
+        category: 'Стеллаж',
+        title: 'Hillfo',
+        productId: 'hillfo',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/cryssora'
+        link: 'https://valonti.ru/catalog/shelves/hillfo'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/trubios-s.png',
-        category: 'Стол',
-        title: 'Trubios S',
-        productId: 'trubios-s',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/pavily.png',
+        category: 'Стеллаж',
+        title: 'Pavily',
+        productId: 'pavily',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/trubios-s'
+        link: 'https://valonti.ru/catalog/shelves/pavily'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/elysius.png',
-        category: 'Стол',
-        title: 'Elysius',
-        productId: 'elysius',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/shelves/spessum.png',
+        category: 'Стеллаж',
+        title: 'Spessum',
+        productId: 'spessum',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/Elysius'
-      },
-      {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/agisur.png',
-        category: 'Стол',
-        title: 'Agisur',
-        productId: 'agisur',
-        price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/agisur'
-      },
-      {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/fermitto.png',
-        category: 'Стол',
-        title: 'Fermitto',
-        productId: 'fermitto',
-        price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/tables/fermitto'
+        link: 'https://valonti.ru/catalog/shelves/spessum'
       },
     ];
     
