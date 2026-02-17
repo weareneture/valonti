@@ -1,33 +1,33 @@
 <script>
-  // Функция инициализации слайдера (вешалки); при 2 товарах на десктопе — сетка 2 в ряд
+  // Функция инициализации слайдера (перегородки); при 2 товарах на десктопе — сетка 2 в ряд
   async function initRecommendationsSlider() {
     const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
 
-    // Базовые данные рекомендаций — вешалки (из prices.json)
+    // Базовые данные рекомендаций — перегородки (из prices.json)
     const recommendationsBase = [
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/hanger/veifur.png',
-        category: 'Вешалка',
-        title: 'Veifur',
-        productId: 'veifur',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/partitions/evelus.png',
+        category: 'Перегородка',
+        title: 'Evelus',
+        productId: 'evelus',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/hanger/veifur'
+        link: 'https://valonti.ru/catalog/partitions/evelus'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/hanger/forcix.png',
-        category: 'Вешалка',
-        title: 'Forcix',
-        productId: 'forcix',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/partitions/amamel.png',
+        category: 'Перегородка',
+        title: 'Amamel',
+        productId: 'amamel',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/hanger/forcix'
+        link: 'https://valonti.ru/catalog/partitions/amamel'
       },
       {
-        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/hanger/horcur.png',
-        category: 'Вешалка',
-        title: 'Horcur',
-        productId: 'horcur',
+        image: 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/partitions/sewona.png',
+        category: 'Перегородка',
+        title: 'Sewona',
+        productId: 'sewona',
         price: 'Загрузка...',
-        link: 'https://valonti.ru/catalog/hanger/horcur'
+        link: 'https://valonti.ru/catalog/partitions/sewona'
       },
     ];
 
@@ -594,7 +594,7 @@
     overflow: hidden;
     display: flex;
     /*max-width: 148px;*/
-    max-width: 57.8px;
+    max-width: 450px;
     height: 300px;
     padding: 20px;
     position: relative;
