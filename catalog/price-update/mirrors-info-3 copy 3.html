@@ -1,0 +1,88 @@
+<!-- ========== "Вешалки"  ========== -->
+
+<div class="model__cat">
+  
+  <div class="model__item third_s" onclick="window.location.href='https://valonti.ru/catalog/hanger/veifur'" data-product-id="veifur">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/hanger/veifur.png" alt="Veifur" class="model__img vertical">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Вешалка</p>
+        <h2 class="model__title">Veifur</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item third_s" onclick="window.location.href='https://valonti.ru/catalog/hanger/forcix'" data-product-id="forcix">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/hanger/forcix.png" alt="Forcix" class="model__img vertical">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Вешалка</p>
+        <h2 class="model__title">Forcix</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item third_s" onclick="window.location.href='https://valonti.ru/catalog/hanger/horcur'" data-product-id="horcur">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/hanger/horcur.png" alt="Horcur" class="model__img vertical">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Вешалка</p>
+        <h2 class="model__title">Horcur</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+
+<script>
+(function() {
+const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
+
+async function updatePrices() {
+  try {
+    const items = document.querySelectorAll('.model__item[data-product-id]');
+    if (items.length === 0) {
+      setTimeout(updatePrices, 100);
+      return;
+    }
+    
+    const response = await fetch(PRICES_URL + '?t=' + Date.now());
+    const data = await response.json();
+    
+    if (!data.prices) return;
+    
+    items.forEach(item => {
+      const productId = item.getAttribute('data-product-id');
+      const priceElement = item.querySelector('.model__price');
+      
+      if (priceElement && data.prices[productId]) {
+        priceElement.textContent = data.prices[productId];
+      }
+    });
+  } catch (error) {
+    console.error('Ошибка загрузки цен:', error);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updatePrices);
+} else {
+  updatePrices();
+}
+
+// Дополнительная попытка для Tilda
+window.addEventListener('load', () => {
+  setTimeout(updatePrices, 200);
+});
+})();
+</script>
