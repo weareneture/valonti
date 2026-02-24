@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Спецификация товара</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #141414;
+      color: #ffffff;
+      padding: 64px;
+      line-height: 1.6;
+    }
+
+    .container {
+      display: flex;
+      gap: 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .left-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .right-column {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .fixed-price-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border: 1px solid #ffffff;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      width: fit-content;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #cccccc;
+      margin-top: -8px;
+    }
+
+    .spec-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .spec-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spec-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .spec-value {
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .services-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .service-item {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .service-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .service-value {
+      font-size: 14px;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 500px;
+      background: #2a2a2a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-image-placeholder {
+      color: #666666;
+      font-size: 14px;
+    }
+
+    .total-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .total-label {
+      font-size: 18px;
+      font-weight: 500;
+      text-transform: lowercase;
+    }
+
+    .total-price {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .total-note {
+      font-size: 12px;
+      color: #cccccc;
+    }
+
+    @media print {
+      body {
+        padding: 40px;
+      }
+      
+      .container {
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .right-column {
+        width: 100%;
+      }
+
+      .product-image {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Левая колонка -->
+    <div class="left-column">
+      <div class="fixed-price-badge">ФИКСИРОВАННАЯ ЦЕНА</div>
+      
+      <div>
+        <h1>Спецификация</h1>
+        <p class="subtitle">Точный состав и материалы. Фиксируется в договоре.</p>
+      </div>
+
+      <div class="spec-list">
+        <div class="spec-item">
+          <span class="spec-label">Изделие:</span>
+          <span class="spec-value" id="product-value">[Лофт-перегородка раздвижная, стандарт] Профиль 40х20 мм, штапики 15х15 мм, порошковая окраска</span>
+        </div>
+
+        <div class="spec-item">
+          <span class="spec-label">Стекло:</span>
+          <span class="spec-value" id="glass-value">[Закалённое тонированное бронза матовое, 6 мм]</span>
+        </div>
+
+        <div class="spec-item">
+          <span class="spec-label">Размеры:</span>
+          <span class="spec-value" id="dimensions-value">[2500 х 4030 мм]</span>
+        </div>
+
+        <div class="spec-item">
+          <span class="spec-label">Цвет:</span>
+          <span class="spec-value" id="color-value">[RAL 9005, муар] — чёрный с микрофактурой</span>
+        </div>
+
+        <div class="spec-item">
+          <span class="spec-label">Комплектация:</span>
+          <span class="spec-value" id="комплектация-value">Ручки петли магниты направляющая ролики накладки уплотнитель заглушки ПСУЛ — ВСЕ ВКЛЮЧЕНО</span>
+        </div>
+      </div>
+
+      <div class="services-section">
+        <div class="service-item">
+          <span class="service-label">Доставка:</span>
+          <span class="service-value" id="delivery-value">[9 000] P</span>
+        </div>
+
+        <div class="service-item">
+          <span class="service-label">Монтаж:</span>
+          <span class="service-value" id="installation-value">[61 000] P</span>
+        </div>
+
+        <div class="service-item">
+          <span class="service-label">Замер:</span>
+          <span class="service-value" id="measurement-value">[5 000] P</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая колонка -->
+    <div class="right-column">
+      <div class="product-image" id="product-image-container">
+        <img id="product-image" src="" alt="Изображение товара" style="display: none;">
+        <span class="product-image-placeholder" id="image-placeholder">Изображение товара</span>
+      </div>
+
+      <div class="total-section">
+        <div class="total-label">итого</div>
+        <div class="total-price" id="total-price">[406 900] P</div>
+        <div class="total-note">с НДС фикс в договоре</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Функция для заполнения данных из формы
+    function fillSpecification(data) {
+      // Заполнение основных полей
+      document.getElementById('product-value').textContent = `[${data.product}]`;
+      document.getElementById('glass-value').textContent = `[${data.glass}]`;
+      document.getElementById('dimensions-value').textContent = `[${data.dimensions} мм]`;
+      document.getElementById('color-value').textContent = `[${data.color}]`;
+      
+      if (data.комплектация) {
+        document.getElementById('комплектация-value').textContent = 
+          `${data.комплектация} — ВСЕ ВКЛЮЧЕНО`;
+      }
+
+      // Заполнение услуг
+      const delivery = parseInt(data.delivery) || 0;
+      const installation = parseInt(data.installation) || 0;
+      const measurement = parseInt(data.measurement) || 0;
+
+      document.getElementById('delivery-value').textContent = 
+        `[${delivery.toLocaleString('ru-RU')}] P`;
+      document.getElementById('installation-value').textContent = 
+        `[${installation.toLocaleString('ru-RU')}] P`;
+      document.getElementById('measurement-value').textContent = 
+        `[${measurement.toLocaleString('ru-RU')}] P`;
+
+      // Расчет и отображение итоговой цены
+      const total = delivery + installation + measurement;
+      document.getElementById('total-price').textContent = 
+        `[${total.toLocaleString('ru-RU')}] P`;
+
+      // Загрузка изображения
+      if (data.imageUrl) {
+        const img = document.getElementById('product-image');
+        const placeholder = document.getElementById('image-placeholder');
+        
+        img.src = data.imageUrl;
+        img.onload = function() {
+          img.style.display = 'block';
+          placeholder.style.display = 'none';
+        };
+        img.onerror = function() {
+          placeholder.style.display = 'block';
+          img.style.display = 'none';
+        };
+      }
+    }
+
+    // Пример использования:
+    // fillSpecification({
+    //   product: 'Лофт-перегородка раздвижная, стандарт. Профиль 40х20 мм',
+    //   glass: 'Закалённое тонированное бронза матовое, 6 мм',
+    //   dimensions: '2500 х 4030',
+    //   color: 'RAL 9005, муар — чёрный с микрофактурой',
+    //   комплектация: 'Ручки петли магниты направляющая ролики накладки уплотнитель заглушки ПСУЛ',
+    //   delivery: 9000,
+    //   installation: 61000,
+    //   measurement: 5000,
+    //   imageUrl: 'https://example.com/product-image.jpg'
+    // });
+
+    // Если данные переданы через URL параметры
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('data')) {
+      try {
+        const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
+        fillSpecification(data);
+      } catch (e) {
+        console.error('Ошибка парсинга данных:', e);
+      }
+    }
+  </script>
+</body>
+</html>
