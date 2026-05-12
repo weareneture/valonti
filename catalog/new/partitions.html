@@ -1,0 +1,87 @@
+<!-- ========== "Перегородки"  ========== -->
+
+<div class="model__cat">
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/partitions/evelus'" data-product-id="evelus">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/full-frame-img/partitions/evelus.jpg" alt="Evelus" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Перегородка</p>
+        <h2 class="model__title">Evelus</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/partitions/amamel'" data-product-id="amamel">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/full-frame-img/partitions/amamel.jpg" alt="Amamel" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Перегородка</p>
+        <h2 class="model__title">Amamel</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="parition model__item full-width" onclick="window.location.href='https://valonti.ru/catalog/partitions/sewona'" data-product-id="sewona">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/full-frame-img/partitions/sewona.jpg" alt="Sewona" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Перегородка</p>
+        <h2 class="model__title">Sewona</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+
+<script>
+(function() {
+const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
+
+async function updatePrices() {
+  try {
+    const items = document.querySelectorAll('.model__item[data-product-id]');
+    if (items.length === 0) {
+      setTimeout(updatePrices, 100);
+      return;
+    }
+    
+    const response = await fetch(PRICES_URL + '?t=' + Date.now());
+    const data = await response.json();
+    
+    if (!data.prices) return;
+    
+    items.forEach(item => {
+      const productId = item.getAttribute('data-product-id');
+      const priceElement = item.querySelector('.model__price');
+      
+      if (priceElement && data.prices[productId]) {
+        priceElement.textContent = data.prices[productId];
+      }
+    });
+  } catch (error) {
+    console.error('Ошибка загрузки цен:', error);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updatePrices);
+} else {
+  updatePrices();
+}
+
+window.addEventListener('load', () => {
+  setTimeout(updatePrices, 200);
+});
+})();
+</script>

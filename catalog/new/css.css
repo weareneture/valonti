@@ -151,13 +151,15 @@
       object-position: center;
     }
     
-    @media(min-width: 1000px) {
-        .model__item.full-width img.model__img.horizontal {
-            width: 62%;
-        }
-        .parition.model__item.full-width img.model__img.horizontal {
-            width: 44%;
-        }
+    /* Поверх старых правил страницы/Tilda (62% / 44% для full-width) — full-frame на всю карточку */
+    .model__item.full-width > img.model__img.horizontal,
+    .parition.model__item.full-width > img.model__img.horizontal {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      inset: 0 !important;
+      object-fit: cover !important;
+      object-position: center;
     }
     
     
@@ -256,7 +258,7 @@
     
       .model__item {
         height: 200px;
-        padding: 0px 12px;
+        padding: 0;
       }
     
       .model__content__left {
