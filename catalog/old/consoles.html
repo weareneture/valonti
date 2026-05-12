@@ -1,0 +1,127 @@
+<!-- ========== "Консоли"  ========== -->
+
+<div class="model__cat">
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/consoles/spalur'" data-product-id="spalur">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/spalur.png" alt="Spalur" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Консоль</p>
+        <h2 class="model__title">Spalur</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/consoles/cryssor'" data-product-id="cryssor">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/cryssor.png" alt="Cryssor" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Консоль</p>
+        <h2 class="model__title">Cryssor</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/consoles/fiamis'" data-product-id="fiamis">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/fiamis.png" alt="Fiamis" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Консоль</p>
+        <h2 class="model__title">Fiamis</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/consoles/spazium'" data-product-id="spazium">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/spazium.png" alt="Spazium" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Консоль</p>
+        <h2 class="model__title">Spazium</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/consoles/itafiso'" data-product-id="itafiso">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/itafis.png" alt="Itafiso" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Консоль</p>
+        <h2 class="model__title">Itafiso</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="model__item half" onclick="window.location.href='https://valonti.ru/catalog/consoles/itafis'" data-product-id="itafis">
+    <img src="https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/img/consoles/itafiso.png" alt="Itafis" class="model__img horizontal">
+    <div class="model__content">
+      <div class="model__content__left">
+        <p class="model__catname">Консоль</p>
+        <h2 class="model__title">Itafis</h2>
+      </div>
+      <div class="model__content__right">
+        <p class="model__price">Загрузка...</p>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+
+<script>
+(function() {
+const PRICES_URL = 'https://raw.githubusercontent.com/weareneture/valonti/refs/heads/main/catalog/price-update/prices.json';
+
+async function updatePrices() {
+  try {
+    const items = document.querySelectorAll('.model__item[data-product-id]');
+    if (items.length === 0) {
+      setTimeout(updatePrices, 100);
+      return;
+    }
+    
+    const response = await fetch(PRICES_URL + '?t=' + Date.now());
+    const data = await response.json();
+    
+    if (!data.prices) return;
+    
+    items.forEach(item => {
+      const productId = item.getAttribute('data-product-id');
+      const priceElement = item.querySelector('.model__price');
+      
+      if (priceElement && data.prices[productId]) {
+        priceElement.textContent = data.prices[productId];
+      }
+    });
+  } catch (error) {
+    console.error('Ошибка загрузки цен:', error);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updatePrices);
+} else {
+  updatePrices();
+}
+
+// Дополнительная попытка для Tilda
+window.addEventListener('load', () => {
+  setTimeout(updatePrices, 200);
+});
+})();
+</script>
